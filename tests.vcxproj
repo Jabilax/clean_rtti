@@ -1,0 +1,917 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{01E435CD-AB54-4385-95E8-1C24C343D1AA}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>poly</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>tests</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)build\bin_debug\</OutDir>
+    <IntDir>$(SolutionDir)build\obj_debug\</IntDir>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+    <PreBuildEventUseInBuild>true</PreBuildEventUseInBuild>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)build\bin_release\</OutDir>
+    <IntDir>$(SolutionDir)build\obj_release\</IntDir>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+    <PreBuildEventUseInBuild>true</PreBuildEventUseInBuild>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>IMGUI_IMPL_OPENGL_LOADER_GLAD;editor_mode;debug;DEBUG;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>false</ConformanceMode>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(ProjectDir)\examples</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <CompileAs>CompileAsCpp</CompileAs>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(ProjectDir)dependencies/lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>assimp-vc142-mt.lib;glad.lib;glfw3.lib;opengl32.lib;XInput9_1_0.lib;Shlwapi.lib;freetype.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>/NODEFAULTLIB:MSVCRT</AdditionalOptions>
+    </Link>
+    <PreBuildEvent>
+      <Command>$(SolutionDir)parser/build/parser.exe</Command>
+    </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>xcopy /y /d "$(ProjectDir)dependencies\lib\*.dll" "$(ProjectDir)build\bin_debug\" </Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>IMGUI_IMPL_OPENGL_LOADER_GLAD;editor_mode;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>false</ConformanceMode>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(ProjectDir)\examples</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <PrecompiledHeaderOutputFile>$(IntDir)$(TargetName).pch</PrecompiledHeaderOutputFile>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(ProjectDir)dependencies/lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>assimp-vc142-mt.lib;glad.lib;glfw3.lib;opengl32.lib;XInput9_1_0.lib;Shlwapi.lib;freetype.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>
+      </AdditionalOptions>
+    </Link>
+    <PreBuildEvent>
+      <Command>$(SolutionDir)parser/build/parser.exe</Command>
+    </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>xcopy /y /d "$(ProjectDir)dependencies\lib\*.dll" "$(ProjectDir)build\bin_release\"</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="data\resources\manager.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\core\arch\fbxalloc.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\core\arch\fbxarch.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\core\arch\fbxdebug.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\core\arch\fbxnew.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\core\arch\fbxstdcompliant.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\core\arch\fbxtypes.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\core\base\fbxarray.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\core\base\fbxbitset.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\core\base\fbxcharptrset.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\core\base\fbxcontainerallocators.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\core\base\fbxdynamicarray.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\core\base\fbxfile.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\core\base\fbxfolder.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\core\base\fbxhashmap.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\core\base\fbxintrusivelist.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\core\base\fbxmap.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\core\base\fbxmemorypool.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\core\base\fbxmultimap.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\core\base\fbxpair.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\core\base\fbxredblacktree.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\core\base\fbxset.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\core\base\fbxstatus.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\core\base\fbxstring.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\core\base\fbxstringlist.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\core\base\fbxtime.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\core\base\fbxtimecode.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\core\base\fbxutils.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\core\fbxclassid.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\core\fbxconnectionpoint.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\core\fbxdatatypes.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\core\fbxemitter.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\core\fbxevent.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\core\fbxeventhandler.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\core\fbxlistener.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\core\fbxloadingstrategy.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\core\fbxmanager.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\core\fbxmodule.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\core\fbxobject.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\core\fbxperipheral.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\core\fbxplugin.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\core\fbxplugincontainer.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\core\fbxproperty.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\core\fbxpropertydef.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\core\fbxpropertyhandle.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\core\fbxpropertypage.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\core\fbxpropertytypes.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\core\fbxquery.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\core\fbxqueryevent.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\core\fbxscopedloadingdirectory.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\core\fbxscopedloadingfilename.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\core\fbxstream.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\core\fbxsymbol.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\core\fbxsystemunit.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\core\fbxxref.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\core\math\fbxaffinematrix.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\core\math\fbxdualquaternion.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\core\math\fbxmath.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\core\math\fbxmatrix.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\core\math\fbxquaternion.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\core\math\fbxtransforms.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\core\math\fbxvector2.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\core\math\fbxvector4.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\core\sync\fbxatomic.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\core\sync\fbxclock.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\core\sync\fbxsync.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\core\sync\fbxthread.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk_def.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk_nsbegin.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk_nsend.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk_version.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fileio\collada\fbxcolladaanimationelement.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fileio\collada\fbxcolladaelement.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fileio\collada\fbxcolladaiostream.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fileio\collada\fbxcolladanamespace.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fileio\collada\fbxcolladatokens.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fileio\collada\fbxcolladautils.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fileio\collada\fbxreadercollada14.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fileio\collada\fbxwritercollada14.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fileio\fbxbase64coder.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fileio\fbxexporter.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fileio\fbxexternaldocreflistener.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fileio\fbxfiletokens.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fileio\fbxglobalcamerasettings.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fileio\fbxgloballightsettings.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fileio\fbxglobalsettings.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fileio\fbxgobo.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fileio\fbximporter.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fileio\fbxiobase.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fileio\fbxiopluginregistry.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fileio\fbxiosettings.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fileio\fbxiosettingspath.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fileio\fbxprogress.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fileio\fbxreader.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fileio\fbxstatistics.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fileio\fbxstatisticsfbx.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fileio\fbxwriter.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fileio\fbx\fbxio.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fileio\fbx\fbxreaderfbx5.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fileio\fbx\fbxreaderfbx6.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fileio\fbx\fbxreaderfbx7.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fileio\fbx\fbxwriterfbx5.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fileio\fbx\fbxwriterfbx6.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fileio\fbx\fbxwriterfbx7.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\animation\fbxanimcurve.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\animation\fbxanimcurvebase.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\animation\fbxanimcurvefilters.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\animation\fbxanimcurvenode.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\animation\fbxanimevalclassic.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\animation\fbxanimevalstate.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\animation\fbxanimevaluator.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\animation\fbxanimlayer.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\animation\fbxanimstack.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\animation\fbxanimutilities.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\constraint\fbxcharacter.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\constraint\fbxcharacternodename.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\constraint\fbxcharacterpose.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\constraint\fbxconstraint.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\constraint\fbxconstraintaim.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\constraint\fbxconstraintcustom.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\constraint\fbxconstraintparent.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\constraint\fbxconstraintposition.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\constraint\fbxconstraintrotation.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\constraint\fbxconstraintscale.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\constraint\fbxconstraintsinglechainik.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\constraint\fbxconstraintutils.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\constraint\fbxcontrolset.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\constraint\fbxhik2fbxcharacter.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\fbxaudio.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\fbxaudiolayer.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\fbxaxissystem.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\fbxcollection.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\fbxcollectionexclusive.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\fbxcontainer.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\fbxcontainertemplate.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\fbxdisplaylayer.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\fbxdocument.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\fbxdocumentinfo.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\fbxenvironment.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\fbxgroupname.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\fbxlibrary.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\fbxmediaclip.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\fbxobjectfilter.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\fbxobjectmetadata.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\fbxobjectscontainer.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\fbxpose.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\fbxreference.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\fbxscene.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\fbxselectionnode.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\fbxselectionset.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\fbxtakeinfo.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\fbxthumbnail.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\fbxvideo.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\geometry\fbxblendshape.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\geometry\fbxblendshapechannel.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\geometry\fbxcache.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\geometry\fbxcachedeffect.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\geometry\fbxcamera.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\geometry\fbxcamerastereo.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\geometry\fbxcameraswitcher.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\geometry\fbxcluster.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\geometry\fbxdeformer.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\geometry\fbxgenericnode.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\geometry\fbxgeometry.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\geometry\fbxgeometrybase.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\geometry\fbxgeometryweightedmap.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\geometry\fbxlayer.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\geometry\fbxlayercontainer.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\geometry\fbxlight.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\geometry\fbxlimitsutilities.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\geometry\fbxline.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\geometry\fbxlodgroup.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\geometry\fbxmarker.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\geometry\fbxmesh.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\geometry\fbxnode.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\geometry\fbxnodeattribute.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\geometry\fbxnull.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\geometry\fbxnurbs.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\geometry\fbxnurbscurve.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\geometry\fbxnurbssurface.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\geometry\fbxopticalreference.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\geometry\fbxpatch.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\geometry\fbxproceduralgeometry.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\geometry\fbxshape.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\geometry\fbxskeleton.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\geometry\fbxskin.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\geometry\fbxsubdeformer.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\geometry\fbxsubdiv.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\geometry\fbxtrimnurbssurface.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\geometry\fbxvertexcachedeformer.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\geometry\fbxweightedmapping.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\shading\fbxbindingoperator.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\shading\fbxbindingsentryview.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\shading\fbxbindingtable.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\shading\fbxbindingtablebase.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\shading\fbxbindingtableentry.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\shading\fbxconstantentryview.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\shading\fbxentryview.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\shading\fbxfiletexture.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\shading\fbximplementation.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\shading\fbximplementationfilter.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\shading\fbximplementationutils.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\shading\fbxlayeredtexture.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\shading\fbxlayerentryview.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\shading\fbxoperatorentryview.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\shading\fbxproceduraltexture.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\shading\fbxpropertyentryview.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\shading\fbxsemanticentryview.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\shading\fbxshadingconventions.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\shading\fbxsurfacelambert.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\shading\fbxsurfacematerial.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\shading\fbxsurfacephong.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\scene\shading\fbxtexture.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\utils\fbxclonemanager.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\utils\fbxdeformationsevaluator.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\utils\fbxembeddedfilesaccumulator.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\utils\fbxgeometryconverter.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\utils\fbxmanipulators.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\utils\fbxmaterialconverter.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\utils\fbxnamehandler.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\utils\fbxprocessor.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\utils\fbxprocessorshaderdependency.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\utils\fbxprocessorxref.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\utils\fbxprocessorxrefuserlib.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\utils\fbxrenamingstrategy.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\utils\fbxrenamingstrategybase.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\utils\fbxrenamingstrategyfbx5.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\utils\fbxrenamingstrategyfbx6.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\utils\fbxrenamingstrategyfbx7.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\utils\fbxrenamingstrategyutilities.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\utils\fbxrootnodeutility.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\utils\fbxscenecheckutility.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\utils\fbxusernotification.h" />
+    <ClInclude Include="dependencies\include\freetype\config\ftconfig.h" />
+    <ClInclude Include="dependencies\include\freetype\config\ftheader.h" />
+    <ClInclude Include="dependencies\include\freetype\config\ftmodule.h" />
+    <ClInclude Include="dependencies\include\freetype\config\ftoption.h" />
+    <ClInclude Include="dependencies\include\freetype\config\ftstdlib.h" />
+    <ClInclude Include="dependencies\include\freetype\freetype.h" />
+    <ClInclude Include="dependencies\include\freetype\freetype\config\ftconfig.h" />
+    <ClInclude Include="dependencies\include\freetype\freetype\config\ftheader.h" />
+    <ClInclude Include="dependencies\include\freetype\freetype\config\ftmodule.h" />
+    <ClInclude Include="dependencies\include\freetype\freetype\config\ftoption.h" />
+    <ClInclude Include="dependencies\include\freetype\freetype\config\ftstdlib.h" />
+    <ClInclude Include="dependencies\include\freetype\freetype\freetype.h" />
+    <ClInclude Include="dependencies\include\freetype\freetype\ftadvanc.h" />
+    <ClInclude Include="dependencies\include\freetype\freetype\ftbbox.h" />
+    <ClInclude Include="dependencies\include\freetype\freetype\ftbdf.h" />
+    <ClInclude Include="dependencies\include\freetype\freetype\ftbitmap.h" />
+    <ClInclude Include="dependencies\include\freetype\freetype\ftbzip2.h" />
+    <ClInclude Include="dependencies\include\freetype\freetype\ftcache.h" />
+    <ClInclude Include="dependencies\include\freetype\freetype\ftchapters.h" />
+    <ClInclude Include="dependencies\include\freetype\freetype\ftcid.h" />
+    <ClInclude Include="dependencies\include\freetype\freetype\ftdriver.h" />
+    <ClInclude Include="dependencies\include\freetype\freetype\fterrdef.h" />
+    <ClInclude Include="dependencies\include\freetype\freetype\fterrors.h" />
+    <ClInclude Include="dependencies\include\freetype\freetype\ftfntfmt.h" />
+    <ClInclude Include="dependencies\include\freetype\freetype\ftgasp.h" />
+    <ClInclude Include="dependencies\include\freetype\freetype\ftglyph.h" />
+    <ClInclude Include="dependencies\include\freetype\freetype\ftgxval.h" />
+    <ClInclude Include="dependencies\include\freetype\freetype\ftgzip.h" />
+    <ClInclude Include="dependencies\include\freetype\freetype\ftimage.h" />
+    <ClInclude Include="dependencies\include\freetype\freetype\ftincrem.h" />
+    <ClInclude Include="dependencies\include\freetype\freetype\ftlcdfil.h" />
+    <ClInclude Include="dependencies\include\freetype\freetype\ftlist.h" />
+    <ClInclude Include="dependencies\include\freetype\freetype\ftlzw.h" />
+    <ClInclude Include="dependencies\include\freetype\freetype\ftmac.h" />
+    <ClInclude Include="dependencies\include\freetype\freetype\ftmm.h" />
+    <ClInclude Include="dependencies\include\freetype\freetype\ftmodapi.h" />
+    <ClInclude Include="dependencies\include\freetype\freetype\ftmoderr.h" />
+    <ClInclude Include="dependencies\include\freetype\freetype\ftotval.h" />
+    <ClInclude Include="dependencies\include\freetype\freetype\ftoutln.h" />
+    <ClInclude Include="dependencies\include\freetype\freetype\ftparams.h" />
+    <ClInclude Include="dependencies\include\freetype\freetype\ftpfr.h" />
+    <ClInclude Include="dependencies\include\freetype\freetype\ftrender.h" />
+    <ClInclude Include="dependencies\include\freetype\freetype\ftsizes.h" />
+    <ClInclude Include="dependencies\include\freetype\freetype\ftsnames.h" />
+    <ClInclude Include="dependencies\include\freetype\freetype\ftstroke.h" />
+    <ClInclude Include="dependencies\include\freetype\freetype\ftsynth.h" />
+    <ClInclude Include="dependencies\include\freetype\freetype\ftsystem.h" />
+    <ClInclude Include="dependencies\include\freetype\freetype\fttrigon.h" />
+    <ClInclude Include="dependencies\include\freetype\freetype\fttypes.h" />
+    <ClInclude Include="dependencies\include\freetype\freetype\ftwinfnt.h" />
+    <ClInclude Include="dependencies\include\freetype\freetype\t1tables.h" />
+    <ClInclude Include="dependencies\include\freetype\freetype\ttnameid.h" />
+    <ClInclude Include="dependencies\include\freetype\freetype\tttables.h" />
+    <ClInclude Include="dependencies\include\freetype\freetype\tttags.h" />
+    <ClInclude Include="dependencies\include\freetype\ft2build.h" />
+    <ClInclude Include="dependencies\include\freetype\ftadvanc.h" />
+    <ClInclude Include="dependencies\include\freetype\ftbbox.h" />
+    <ClInclude Include="dependencies\include\freetype\ftbdf.h" />
+    <ClInclude Include="dependencies\include\freetype\ftbitmap.h" />
+    <ClInclude Include="dependencies\include\freetype\ftbzip2.h" />
+    <ClInclude Include="dependencies\include\freetype\ftcache.h" />
+    <ClInclude Include="dependencies\include\freetype\ftchapters.h" />
+    <ClInclude Include="dependencies\include\freetype\ftcid.h" />
+    <ClInclude Include="dependencies\include\freetype\ftdriver.h" />
+    <ClInclude Include="dependencies\include\freetype\fterrdef.h" />
+    <ClInclude Include="dependencies\include\freetype\fterrors.h" />
+    <ClInclude Include="dependencies\include\freetype\ftfntfmt.h" />
+    <ClInclude Include="dependencies\include\freetype\ftgasp.h" />
+    <ClInclude Include="dependencies\include\freetype\ftglyph.h" />
+    <ClInclude Include="dependencies\include\freetype\ftgxval.h" />
+    <ClInclude Include="dependencies\include\freetype\ftgzip.h" />
+    <ClInclude Include="dependencies\include\freetype\ftimage.h" />
+    <ClInclude Include="dependencies\include\freetype\ftincrem.h" />
+    <ClInclude Include="dependencies\include\freetype\ftlcdfil.h" />
+    <ClInclude Include="dependencies\include\freetype\ftlist.h" />
+    <ClInclude Include="dependencies\include\freetype\ftlzw.h" />
+    <ClInclude Include="dependencies\include\freetype\ftmac.h" />
+    <ClInclude Include="dependencies\include\freetype\ftmm.h" />
+    <ClInclude Include="dependencies\include\freetype\ftmodapi.h" />
+    <ClInclude Include="dependencies\include\freetype\ftmoderr.h" />
+    <ClInclude Include="dependencies\include\freetype\ftotval.h" />
+    <ClInclude Include="dependencies\include\freetype\ftoutln.h" />
+    <ClInclude Include="dependencies\include\freetype\ftparams.h" />
+    <ClInclude Include="dependencies\include\freetype\ftpfr.h" />
+    <ClInclude Include="dependencies\include\freetype\ftrender.h" />
+    <ClInclude Include="dependencies\include\freetype\ftsizes.h" />
+    <ClInclude Include="dependencies\include\freetype\ftsnames.h" />
+    <ClInclude Include="dependencies\include\freetype\ftstroke.h" />
+    <ClInclude Include="dependencies\include\freetype\ftsynth.h" />
+    <ClInclude Include="dependencies\include\freetype\ftsystem.h" />
+    <ClInclude Include="dependencies\include\freetype\fttrigon.h" />
+    <ClInclude Include="dependencies\include\freetype\fttypes.h" />
+    <ClInclude Include="dependencies\include\freetype\ftwinfnt.h" />
+    <ClInclude Include="dependencies\include\freetype\t1tables.h" />
+    <ClInclude Include="dependencies\include\freetype\ttnameid.h" />
+    <ClInclude Include="dependencies\include\freetype\tttables.h" />
+    <ClInclude Include="dependencies\include\freetype\tttags.h" />
+    <ClInclude Include="dependencies\include\glad\glad.h" />
+    <ClInclude Include="dependencies\include\glfw\glfw3.h" />
+    <ClInclude Include="dependencies\include\glfw\glfw3native.h" />
+    <ClInclude Include="dependencies\include\glm\common.hpp" />
+    <ClInclude Include="dependencies\include\glm\detail\compute_common.hpp" />
+    <ClInclude Include="dependencies\include\glm\detail\compute_vector_relational.hpp" />
+    <ClInclude Include="dependencies\include\glm\detail\qualifier.hpp" />
+    <ClInclude Include="dependencies\include\glm\detail\setup.hpp" />
+    <ClInclude Include="dependencies\include\glm\detail\type_float.hpp" />
+    <ClInclude Include="dependencies\include\glm\detail\type_half.hpp" />
+    <ClInclude Include="dependencies\include\glm\detail\type_mat2x2.hpp" />
+    <ClInclude Include="dependencies\include\glm\detail\type_mat2x3.hpp" />
+    <ClInclude Include="dependencies\include\glm\detail\type_mat2x4.hpp" />
+    <ClInclude Include="dependencies\include\glm\detail\type_mat3x2.hpp" />
+    <ClInclude Include="dependencies\include\glm\detail\type_mat3x3.hpp" />
+    <ClInclude Include="dependencies\include\glm\detail\type_mat3x4.hpp" />
+    <ClInclude Include="dependencies\include\glm\detail\type_mat4x2.hpp" />
+    <ClInclude Include="dependencies\include\glm\detail\type_mat4x3.hpp" />
+    <ClInclude Include="dependencies\include\glm\detail\type_mat4x4.hpp" />
+    <ClInclude Include="dependencies\include\glm\detail\type_quat.hpp" />
+    <ClInclude Include="dependencies\include\glm\detail\type_vec1.hpp" />
+    <ClInclude Include="dependencies\include\glm\detail\type_vec2.hpp" />
+    <ClInclude Include="dependencies\include\glm\detail\type_vec3.hpp" />
+    <ClInclude Include="dependencies\include\glm\detail\type_vec4.hpp" />
+    <ClInclude Include="dependencies\include\glm\detail\_features.hpp" />
+    <ClInclude Include="dependencies\include\glm\detail\_fixes.hpp" />
+    <ClInclude Include="dependencies\include\glm\detail\_noise.hpp" />
+    <ClInclude Include="dependencies\include\glm\detail\_swizzle.hpp" />
+    <ClInclude Include="dependencies\include\glm\detail\_swizzle_func.hpp" />
+    <ClInclude Include="dependencies\include\glm\detail\_vectorize.hpp" />
+    <ClInclude Include="dependencies\include\glm\exponential.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\matrix_clip_space.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\matrix_double2x2.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\matrix_double2x2_precision.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\matrix_double2x3.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\matrix_double2x3_precision.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\matrix_double2x4.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\matrix_double2x4_precision.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\matrix_double3x2.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\matrix_double3x2_precision.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\matrix_double3x3.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\matrix_double3x3_precision.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\matrix_double3x4.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\matrix_double3x4_precision.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\matrix_double4x2.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\matrix_double4x2_precision.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\matrix_double4x3.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\matrix_double4x3_precision.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\matrix_double4x4.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\matrix_double4x4_precision.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\matrix_float2x2.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\matrix_float2x2_precision.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\matrix_float2x3.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\matrix_float2x3_precision.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\matrix_float2x4.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\matrix_float2x4_precision.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\matrix_float3x2.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\matrix_float3x2_precision.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\matrix_float3x3.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\matrix_float3x3_precision.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\matrix_float3x4.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\matrix_float3x4_precision.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\matrix_float4x2.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\matrix_float4x2_precision.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\matrix_float4x3.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\matrix_float4x3_precision.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\matrix_float4x4.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\matrix_float4x4_precision.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\matrix_projection.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\matrix_relational.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\matrix_transform.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\quaternion_common.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\quaternion_double.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\quaternion_double_precision.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\quaternion_exponential.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\quaternion_float.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\quaternion_float_precision.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\quaternion_geometric.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\quaternion_relational.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\quaternion_transform.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\quaternion_trigonometric.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\scalar_common.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\scalar_constants.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\scalar_int_sized.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\scalar_relational.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\scalar_uint_sized.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\scalar_ulp.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\vector_bool1.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\vector_bool1_precision.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\vector_bool2.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\vector_bool2_precision.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\vector_bool3.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\vector_bool3_precision.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\vector_bool4.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\vector_bool4_precision.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\vector_common.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\vector_double1.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\vector_double1_precision.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\vector_double2.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\vector_double2_precision.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\vector_double3.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\vector_double3_precision.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\vector_double4.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\vector_double4_precision.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\vector_float1.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\vector_float1_precision.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\vector_float2.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\vector_float2_precision.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\vector_float3.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\vector_float3_precision.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\vector_float4.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\vector_float4_precision.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\vector_int1.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\vector_int1_precision.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\vector_int2.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\vector_int2_precision.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\vector_int3.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\vector_int3_precision.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\vector_int4.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\vector_int4_precision.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\vector_relational.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\vector_uint1.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\vector_uint1_precision.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\vector_uint2.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\vector_uint2_precision.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\vector_uint3.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\vector_uint3_precision.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\vector_uint4.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\vector_uint4_precision.hpp" />
+    <ClInclude Include="dependencies\include\glm\ext\vector_ulp.hpp" />
+    <ClInclude Include="dependencies\include\glm\fwd.hpp" />
+    <ClInclude Include="dependencies\include\glm\geometric.hpp" />
+    <ClInclude Include="dependencies\include\glm\glm.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtc\bitfield.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtc\color_space.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtc\constants.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtc\epsilon.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtc\integer.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtc\matrix_access.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtc\matrix_integer.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtc\matrix_inverse.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtc\matrix_transform.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtc\noise.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtc\packing.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtc\quaternion.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtc\random.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtc\reciprocal.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtc\round.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtc\type_aligned.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtc\type_precision.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtc\type_ptr.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtc\ulp.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtc\vec1.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtx\associated_min_max.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtx\bit.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtx\closest_point.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtx\color_encoding.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtx\color_space.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtx\color_space_YCoCg.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtx\common.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtx\compatibility.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtx\component_wise.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtx\dual_quaternion.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtx\easing.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtx\euler_angles.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtx\extend.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtx\extended_min_max.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtx\exterior_product.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtx\fast_exponential.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtx\fast_square_root.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtx\fast_trigonometry.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtx\functions.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtx\gradient_paint.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtx\handed_coordinate_space.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtx\hash.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtx\integer.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtx\intersect.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtx\io.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtx\log_base.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtx\matrix_cross_product.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtx\matrix_decompose.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtx\matrix_factorisation.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtx\matrix_interpolation.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtx\matrix_major_storage.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtx\matrix_operation.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtx\matrix_query.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtx\matrix_transform_2d.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtx\mixed_product.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtx\norm.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtx\normal.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtx\normalize_dot.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtx\number_precision.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtx\optimum_pow.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtx\orthonormalize.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtx\perpendicular.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtx\polar_coordinates.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtx\projection.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtx\quaternion.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtx\range.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtx\raw_data.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtx\rotate_normalized_axis.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtx\rotate_vector.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtx\scalar_multiplication.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtx\scalar_relational.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtx\spline.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtx\std_based_type.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtx\string_cast.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtx\texture.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtx\transform.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtx\transform2.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtx\type_aligned.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtx\type_trait.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtx\vector_angle.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtx\vector_query.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtx\vec_swizzle.hpp" />
+    <ClInclude Include="dependencies\include\glm\gtx\wrap.hpp" />
+    <ClInclude Include="dependencies\include\glm\integer.hpp" />
+    <ClInclude Include="dependencies\include\glm\mat2x2.hpp" />
+    <ClInclude Include="dependencies\include\glm\mat2x3.hpp" />
+    <ClInclude Include="dependencies\include\glm\mat2x4.hpp" />
+    <ClInclude Include="dependencies\include\glm\mat3x2.hpp" />
+    <ClInclude Include="dependencies\include\glm\mat3x3.hpp" />
+    <ClInclude Include="dependencies\include\glm\mat3x4.hpp" />
+    <ClInclude Include="dependencies\include\glm\mat4x2.hpp" />
+    <ClInclude Include="dependencies\include\glm\mat4x3.hpp" />
+    <ClInclude Include="dependencies\include\glm\mat4x4.hpp" />
+    <ClInclude Include="dependencies\include\glm\matrix.hpp" />
+    <ClInclude Include="dependencies\include\glm\packing.hpp" />
+    <ClInclude Include="dependencies\include\glm\simd\common.h" />
+    <ClInclude Include="dependencies\include\glm\simd\exponential.h" />
+    <ClInclude Include="dependencies\include\glm\simd\geometric.h" />
+    <ClInclude Include="dependencies\include\glm\simd\integer.h" />
+    <ClInclude Include="dependencies\include\glm\simd\matrix.h" />
+    <ClInclude Include="dependencies\include\glm\simd\packing.h" />
+    <ClInclude Include="dependencies\include\glm\simd\platform.h" />
+    <ClInclude Include="dependencies\include\glm\simd\trigonometric.h" />
+    <ClInclude Include="dependencies\include\glm\simd\vector_relational.h" />
+    <ClInclude Include="dependencies\include\glm\trigonometric.hpp" />
+    <ClInclude Include="dependencies\include\glm\vec2.hpp" />
+    <ClInclude Include="dependencies\include\glm\vec3.hpp" />
+    <ClInclude Include="dependencies\include\glm\vec4.hpp" />
+    <ClInclude Include="dependencies\include\glm\vector_relational.hpp" />
+    <ClInclude Include="dependencies\include\imgui\imconfig.h" />
+    <ClInclude Include="dependencies\include\imgui\imgui.h" />
+    <ClInclude Include="dependencies\include\imgui\imgui_freetype.h" />
+    <ClInclude Include="dependencies\include\imgui\imgui_gizmo.h" />
+    <ClInclude Include="dependencies\include\imgui\imgui_gizmo_quat.h" />
+    <ClInclude Include="dependencies\include\imgui\imgui_impl_glfw.h" />
+    <ClInclude Include="dependencies\include\imgui\imgui_impl_opengl3.h" />
+    <ClInclude Include="dependencies\include\imgui\imgui_internal.h" />
+    <ClInclude Include="dependencies\include\imgui\imgui_stdlib.h" />
+    <ClInclude Include="dependencies\include\imgui\imgui_text.h" />
+    <ClInclude Include="dependencies\include\imgui\imstb_rectpack.h" />
+    <ClInclude Include="dependencies\include\imgui\imstb_textedit.h" />
+    <ClInclude Include="dependencies\include\imgui\imstb_truetype.h" />
+    <ClInclude Include="dependencies\include\imgui\virtual_gizmo.h" />
+    <ClInclude Include="dependencies\include\imgui\virtual_gizmo_config.h" />
+    <ClInclude Include="dependencies\include\imgui\virtual_gizmo_math.h" />
+    <ClInclude Include="dependencies\include\json\json-forwards.h" />
+    <ClInclude Include="dependencies\include\json\json.h" />
+    <ClInclude Include="dependencies\include\khr\khrplatform.h" />
+    <ClInclude Include="dependencies\include\stb\stb_image.h" />
+    <ClInclude Include="dependencies\include\stb\stb_image_write.h" />
+    <ClInclude Include="source\animation.h" />
+    <ClInclude Include="source\commands.h" />
+    <ClInclude Include="source\sample_game\game.h" />
+    <ClInclude Include="source\graphics.h" />
+    <ClInclude Include="source\serialization.h" />
+    <ClInclude Include="source\show_in_editor.h" />
+    <ClInclude Include="source\types.h" />
+    <ClInclude Include="source\utils.h" />
+    <ClInclude Include="source\framework.h" />
+    <ClInclude Include="source\pch.h" />
+    <ClInclude Include="source\resource_handle.h" />
+    <ClInclude Include="source\resource_info.h" />
+    <ClInclude Include="source\smart_vector.h" />
+    <ClInclude Include="source\utils\smart_vector.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="data\data.cpp" />
+    <ClCompile Include="dependencies\include\glad\glad.cpp" />
+    <ClCompile Include="dependencies\include\glm\detail\glm.cpp" />
+    <ClCompile Include="dependencies\include\imgui\imgui.cpp" />
+    <ClCompile Include="dependencies\include\imgui\imgui_demo.cpp" />
+    <ClCompile Include="dependencies\include\imgui\imgui_draw.cpp" />
+    <ClCompile Include="dependencies\include\imgui\imgui_freetype.cpp" />
+    <ClCompile Include="dependencies\include\imgui\imgui_gizmo.cpp" />
+    <ClCompile Include="dependencies\include\imgui\imgui_gizmo_quat.cpp" />
+    <ClCompile Include="dependencies\include\imgui\imgui_impl_glfw.cpp" />
+    <ClCompile Include="dependencies\include\imgui\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="dependencies\include\imgui\imgui_stdlib.cpp" />
+    <ClCompile Include="dependencies\include\imgui\imgui_text.cpp" />
+    <ClCompile Include="dependencies\include\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="dependencies\include\json\jsoncpp.cpp" />
+    <ClCompile Include="source\animation.cpp" />
+    <ClCompile Include="source\example.cpp" />
+    <ClCompile Include="source\framework.cpp" />
+    <ClCompile Include="source\sample_game\game.cpp" />
+    <ClCompile Include="source\graphics.cpp" />
+    <ClCompile Include="source\pch.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="source\serialization.cpp" />
+    <ClCompile Include="source\utils.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="dependencies\include\glm\detail\func_common.inl" />
+    <None Include="dependencies\include\glm\detail\func_common_simd.inl" />
+    <None Include="dependencies\include\glm\detail\func_exponential.inl" />
+    <None Include="dependencies\include\glm\detail\func_exponential_simd.inl" />
+    <None Include="dependencies\include\glm\detail\func_geometric.inl" />
+    <None Include="dependencies\include\glm\detail\func_geometric_simd.inl" />
+    <None Include="dependencies\include\glm\detail\func_integer.inl" />
+    <None Include="dependencies\include\glm\detail\func_integer_simd.inl" />
+    <None Include="dependencies\include\glm\detail\func_matrix.inl" />
+    <None Include="dependencies\include\glm\detail\func_matrix_simd.inl" />
+    <None Include="dependencies\include\glm\detail\func_packing.inl" />
+    <None Include="dependencies\include\glm\detail\func_packing_simd.inl" />
+    <None Include="dependencies\include\glm\detail\func_trigonometric.inl" />
+    <None Include="dependencies\include\glm\detail\func_trigonometric_simd.inl" />
+    <None Include="dependencies\include\glm\detail\func_vector_relational.inl" />
+    <None Include="dependencies\include\glm\detail\func_vector_relational_simd.inl" />
+    <None Include="dependencies\include\glm\detail\type_half.inl" />
+    <None Include="dependencies\include\glm\detail\type_mat2x2.inl" />
+    <None Include="dependencies\include\glm\detail\type_mat2x3.inl" />
+    <None Include="dependencies\include\glm\detail\type_mat2x4.inl" />
+    <None Include="dependencies\include\glm\detail\type_mat3x2.inl" />
+    <None Include="dependencies\include\glm\detail\type_mat3x3.inl" />
+    <None Include="dependencies\include\glm\detail\type_mat3x4.inl" />
+    <None Include="dependencies\include\glm\detail\type_mat4x2.inl" />
+    <None Include="dependencies\include\glm\detail\type_mat4x3.inl" />
+    <None Include="dependencies\include\glm\detail\type_mat4x4.inl" />
+    <None Include="dependencies\include\glm\detail\type_mat4x4_simd.inl" />
+    <None Include="dependencies\include\glm\detail\type_quat.inl" />
+    <None Include="dependencies\include\glm\detail\type_quat_simd.inl" />
+    <None Include="dependencies\include\glm\detail\type_vec1.inl" />
+    <None Include="dependencies\include\glm\detail\type_vec2.inl" />
+    <None Include="dependencies\include\glm\detail\type_vec3.inl" />
+    <None Include="dependencies\include\glm\detail\type_vec4.inl" />
+    <None Include="dependencies\include\glm\detail\type_vec4_simd.inl" />
+    <None Include="dependencies\include\glm\ext\matrix_clip_space.inl" />
+    <None Include="dependencies\include\glm\ext\matrix_projection.inl" />
+    <None Include="dependencies\include\glm\ext\matrix_relational.inl" />
+    <None Include="dependencies\include\glm\ext\matrix_transform.inl" />
+    <None Include="dependencies\include\glm\ext\quaternion_common.inl" />
+    <None Include="dependencies\include\glm\ext\quaternion_common_simd.inl" />
+    <None Include="dependencies\include\glm\ext\quaternion_exponential.inl" />
+    <None Include="dependencies\include\glm\ext\quaternion_geometric.inl" />
+    <None Include="dependencies\include\glm\ext\quaternion_relational.inl" />
+    <None Include="dependencies\include\glm\ext\quaternion_transform.inl" />
+    <None Include="dependencies\include\glm\ext\quaternion_trigonometric.inl" />
+    <None Include="dependencies\include\glm\ext\scalar_common.inl" />
+    <None Include="dependencies\include\glm\ext\scalar_constants.inl" />
+    <None Include="dependencies\include\glm\ext\scalar_relational.inl" />
+    <None Include="dependencies\include\glm\ext\scalar_ulp.inl" />
+    <None Include="dependencies\include\glm\ext\vector_common.inl" />
+    <None Include="dependencies\include\glm\ext\vector_relational.inl" />
+    <None Include="dependencies\include\glm\ext\vector_ulp.inl" />
+    <None Include="dependencies\include\glm\gtc\bitfield.inl" />
+    <None Include="dependencies\include\glm\gtc\color_space.inl" />
+    <None Include="dependencies\include\glm\gtc\constants.inl" />
+    <None Include="dependencies\include\glm\gtc\epsilon.inl" />
+    <None Include="dependencies\include\glm\gtc\integer.inl" />
+    <None Include="dependencies\include\glm\gtc\matrix_access.inl" />
+    <None Include="dependencies\include\glm\gtc\matrix_inverse.inl" />
+    <None Include="dependencies\include\glm\gtc\matrix_transform.inl" />
+    <None Include="dependencies\include\glm\gtc\noise.inl" />
+    <None Include="dependencies\include\glm\gtc\packing.inl" />
+    <None Include="dependencies\include\glm\gtc\quaternion.inl" />
+    <None Include="dependencies\include\glm\gtc\quaternion_simd.inl" />
+    <None Include="dependencies\include\glm\gtc\random.inl" />
+    <None Include="dependencies\include\glm\gtc\reciprocal.inl" />
+    <None Include="dependencies\include\glm\gtc\round.inl" />
+    <None Include="dependencies\include\glm\gtc\type_precision.inl" />
+    <None Include="dependencies\include\glm\gtc\type_ptr.inl" />
+    <None Include="dependencies\include\glm\gtc\ulp.inl" />
+    <None Include="dependencies\include\glm\gtx\associated_min_max.inl" />
+    <None Include="dependencies\include\glm\gtx\bit.inl" />
+    <None Include="dependencies\include\glm\gtx\closest_point.inl" />
+    <None Include="dependencies\include\glm\gtx\color_encoding.inl" />
+    <None Include="dependencies\include\glm\gtx\color_space.inl" />
+    <None Include="dependencies\include\glm\gtx\color_space_YCoCg.inl" />
+    <None Include="dependencies\include\glm\gtx\common.inl" />
+    <None Include="dependencies\include\glm\gtx\compatibility.inl" />
+    <None Include="dependencies\include\glm\gtx\component_wise.inl" />
+    <None Include="dependencies\include\glm\gtx\dual_quaternion.inl" />
+    <None Include="dependencies\include\glm\gtx\easing.inl" />
+    <None Include="dependencies\include\glm\gtx\euler_angles.inl" />
+    <None Include="dependencies\include\glm\gtx\extend.inl" />
+    <None Include="dependencies\include\glm\gtx\extended_min_max.inl" />
+    <None Include="dependencies\include\glm\gtx\exterior_product.inl" />
+    <None Include="dependencies\include\glm\gtx\fast_exponential.inl" />
+    <None Include="dependencies\include\glm\gtx\fast_square_root.inl" />
+    <None Include="dependencies\include\glm\gtx\fast_trigonometry.inl" />
+    <None Include="dependencies\include\glm\gtx\float_notmalize.inl" />
+    <None Include="dependencies\include\glm\gtx\functions.inl" />
+    <None Include="dependencies\include\glm\gtx\gradient_paint.inl" />
+    <None Include="dependencies\include\glm\gtx\handed_coordinate_space.inl" />
+    <None Include="dependencies\include\glm\gtx\hash.inl" />
+    <None Include="dependencies\include\glm\gtx\integer.inl" />
+    <None Include="dependencies\include\glm\gtx\intersect.inl" />
+    <None Include="dependencies\include\glm\gtx\io.inl" />
+    <None Include="dependencies\include\glm\gtx\log_base.inl" />
+    <None Include="dependencies\include\glm\gtx\matrix_cross_product.inl" />
+    <None Include="dependencies\include\glm\gtx\matrix_decompose.inl" />
+    <None Include="dependencies\include\glm\gtx\matrix_factorisation.inl" />
+    <None Include="dependencies\include\glm\gtx\matrix_interpolation.inl" />
+    <None Include="dependencies\include\glm\gtx\matrix_major_storage.inl" />
+    <None Include="dependencies\include\glm\gtx\matrix_operation.inl" />
+    <None Include="dependencies\include\glm\gtx\matrix_query.inl" />
+    <None Include="dependencies\include\glm\gtx\matrix_transform_2d.inl" />
+    <None Include="dependencies\include\glm\gtx\mixed_product.inl" />
+    <None Include="dependencies\include\glm\gtx\norm.inl" />
+    <None Include="dependencies\include\glm\gtx\normal.inl" />
+    <None Include="dependencies\include\glm\gtx\normalize_dot.inl" />
+    <None Include="dependencies\include\glm\gtx\number_precision.inl" />
+    <None Include="dependencies\include\glm\gtx\optimum_pow.inl" />
+    <None Include="dependencies\include\glm\gtx\orthonormalize.inl" />
+    <None Include="dependencies\include\glm\gtx\perpendicular.inl" />
+    <None Include="dependencies\include\glm\gtx\polar_coordinates.inl" />
+    <None Include="dependencies\include\glm\gtx\projection.inl" />
+    <None Include="dependencies\include\glm\gtx\quaternion.inl" />
+    <None Include="dependencies\include\glm\gtx\raw_data.inl" />
+    <None Include="dependencies\include\glm\gtx\rotate_normalized_axis.inl" />
+    <None Include="dependencies\include\glm\gtx\rotate_vector.inl" />
+    <None Include="dependencies\include\glm\gtx\scalar_relational.inl" />
+    <None Include="dependencies\include\glm\gtx\spline.inl" />
+    <None Include="dependencies\include\glm\gtx\std_based_type.inl" />
+    <None Include="dependencies\include\glm\gtx\string_cast.inl" />
+    <None Include="dependencies\include\glm\gtx\texture.inl" />
+    <None Include="dependencies\include\glm\gtx\transform.inl" />
+    <None Include="dependencies\include\glm\gtx\transform2.inl" />
+    <None Include="dependencies\include\glm\gtx\type_aligned.inl" />
+    <None Include="dependencies\include\glm\gtx\type_trait.inl" />
+    <None Include="dependencies\include\glm\gtx\vector_angle.inl" />
+    <None Include="dependencies\include\glm\gtx\vector_query.inl" />
+    <None Include="dependencies\include\glm\gtx\wrap.inl" />
+    <None Include="resources\shaders\bloom.shl" />
+    <None Include="resources\shaders\decal.shl" />
+    <None Include="resources\shaders\depth.shl" />
+    <None Include="resources\shaders\hbao.shl" />
+    <None Include="resources\shaders\image.shl" />
+    <None Include="resources\shaders\blur.shl" />
+    <None Include="resources\shaders\color.shl" />
+    <None Include="resources\shaders\copy.shl" />
+    <None Include="resources\shaders\fxaa.shl" />
+    <None Include="resources\shaders\light.shl" />
+    <None Include="resources\shaders\linear_depth.shl" />
+    <None Include="resources\shaders\point_light.shl" />
+    <None Include="resources\shaders\shadow.shl" />
+    <None Include="resources\shaders\ssao.shl" />
+    <None Include="resources\shaders\material.shl" />
+    <None Include="resources\shaders\ssr.shl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="dependencies\include\glm\CMakeLists.txt" />
+    <Text Include="source\todo.txt" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

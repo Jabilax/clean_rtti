@@ -1,0 +1,361 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Output|x64">
+      <Configuration>Output</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{48BA805D-4FA5-44F2-B209-DABDFAEF413E}</ProjectGuid>
+    <RootNamespace>polyparser</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>parser</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Output|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Output|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>$(SolutionDir)parser\build\</OutDir>
+    <IntDir>$(SolutionDir)build\obj_parser_release\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>$(SolutionDir)parser\build\</OutDir>
+    <IntDir>$(SolutionDir)build\obj_parser_debug\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Output|x64'">
+    <OutDir>$(SolutionDir)parser\build\</OutDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>Shlwapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>Shlwapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Output|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>Shlwapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="parser\flow.cpp" />
+    <ClCompile Include="parser\main.cpp" />
+    <ClCompile Include="parser\parser.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\core\arch\fbxalloc.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\core\arch\fbxarch.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\core\arch\fbxdebug.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\core\arch\fbxnew.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\core\arch\fbxstdcompliant.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\core\arch\fbxtypes.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\core\base\fbxarray.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\core\base\fbxbitset.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\core\base\fbxcharptrset.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\core\base\fbxcontainerallocators.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\core\base\fbxdynamicarray.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\core\base\fbxfile.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\core\base\fbxfolder.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\core\base\fbxhashmap.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\core\base\fbxintrusivelist.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\core\base\fbxmap.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\core\base\fbxmemorypool.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\core\base\fbxmultimap.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\core\base\fbxpair.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\core\base\fbxredblacktree.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\core\base\fbxset.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\core\base\fbxstatus.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\core\base\fbxstring.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\core\base\fbxstringlist.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\core\base\fbxtime.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\core\base\fbxtimecode.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\core\base\fbxutils.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\core\fbxclassid.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\core\fbxconnectionpoint.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\core\fbxdatatypes.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\core\fbxemitter.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\core\fbxevent.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\core\fbxeventhandler.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\core\fbxlistener.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\core\fbxloadingstrategy.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\core\fbxmanager.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\core\fbxmodule.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\core\fbxobject.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\core\fbxperipheral.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\core\fbxplugin.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\core\fbxplugincontainer.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\core\fbxproperty.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\core\fbxpropertydef.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\core\fbxpropertyhandle.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\core\fbxpropertypage.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\core\fbxpropertytypes.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\core\fbxquery.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\core\fbxqueryevent.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\core\fbxscopedloadingdirectory.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\core\fbxscopedloadingfilename.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\core\fbxstream.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\core\fbxsymbol.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\core\fbxsystemunit.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\core\fbxxref.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\core\math\fbxaffinematrix.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\core\math\fbxdualquaternion.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\core\math\fbxmath.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\core\math\fbxmatrix.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\core\math\fbxquaternion.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\core\math\fbxtransforms.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\core\math\fbxvector2.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\core\math\fbxvector4.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\core\sync\fbxatomic.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\core\sync\fbxclock.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\core\sync\fbxsync.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\core\sync\fbxthread.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\fbxsdk_def.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\fbxsdk_nsbegin.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\fbxsdk_nsend.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\fbxsdk_version.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\fileio\collada\fbxcolladaanimationelement.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\fileio\collada\fbxcolladaelement.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\fileio\collada\fbxcolladaiostream.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\fileio\collada\fbxcolladanamespace.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\fileio\collada\fbxcolladatokens.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\fileio\collada\fbxcolladautils.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\fileio\collada\fbxreadercollada14.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\fileio\collada\fbxwritercollada14.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\fileio\fbxbase64coder.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\fileio\fbxexporter.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\fileio\fbxexternaldocreflistener.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\fileio\fbxfiletokens.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\fileio\fbxglobalcamerasettings.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\fileio\fbxgloballightsettings.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\fileio\fbxglobalsettings.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\fileio\fbxgobo.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\fileio\fbximporter.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\fileio\fbxiobase.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\fileio\fbxiopluginregistry.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\fileio\fbxiosettings.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\fileio\fbxiosettingspath.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\fileio\fbxprogress.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\fileio\fbxreader.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\fileio\fbxstatistics.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\fileio\fbxstatisticsfbx.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\fileio\fbxwriter.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\fileio\fbx\fbxio.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\fileio\fbx\fbxreaderfbx5.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\fileio\fbx\fbxreaderfbx6.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\fileio\fbx\fbxreaderfbx7.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\fileio\fbx\fbxwriterfbx5.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\fileio\fbx\fbxwriterfbx6.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\fileio\fbx\fbxwriterfbx7.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\animation\fbxanimcurve.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\animation\fbxanimcurvebase.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\animation\fbxanimcurvefilters.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\animation\fbxanimcurvenode.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\animation\fbxanimevalclassic.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\animation\fbxanimevalstate.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\animation\fbxanimevaluator.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\animation\fbxanimlayer.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\animation\fbxanimstack.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\animation\fbxanimutilities.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\constraint\fbxcharacter.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\constraint\fbxcharacternodename.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\constraint\fbxcharacterpose.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\constraint\fbxconstraint.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\constraint\fbxconstraintaim.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\constraint\fbxconstraintcustom.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\constraint\fbxconstraintparent.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\constraint\fbxconstraintposition.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\constraint\fbxconstraintrotation.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\constraint\fbxconstraintscale.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\constraint\fbxconstraintsinglechainik.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\constraint\fbxconstraintutils.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\constraint\fbxcontrolset.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\constraint\fbxhik2fbxcharacter.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\fbxaudio.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\fbxaudiolayer.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\fbxaxissystem.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\fbxcollection.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\fbxcollectionexclusive.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\fbxcontainer.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\fbxcontainertemplate.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\fbxdisplaylayer.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\fbxdocument.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\fbxdocumentinfo.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\fbxenvironment.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\fbxgroupname.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\fbxlibrary.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\fbxmediaclip.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\fbxobjectfilter.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\fbxobjectmetadata.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\fbxobjectscontainer.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\fbxpose.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\fbxreference.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\fbxscene.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\fbxselectionnode.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\fbxselectionset.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\fbxtakeinfo.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\fbxthumbnail.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\fbxvideo.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\geometry\fbxblendshape.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\geometry\fbxblendshapechannel.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\geometry\fbxcache.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\geometry\fbxcachedeffect.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\geometry\fbxcamera.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\geometry\fbxcamerastereo.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\geometry\fbxcameraswitcher.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\geometry\fbxcluster.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\geometry\fbxdeformer.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\geometry\fbxgenericnode.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\geometry\fbxgeometry.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\geometry\fbxgeometrybase.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\geometry\fbxgeometryweightedmap.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\geometry\fbxlayer.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\geometry\fbxlayercontainer.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\geometry\fbxlight.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\geometry\fbxlimitsutilities.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\geometry\fbxline.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\geometry\fbxlodgroup.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\geometry\fbxmarker.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\geometry\fbxmesh.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\geometry\fbxnode.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\geometry\fbxnodeattribute.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\geometry\fbxnull.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\geometry\fbxnurbs.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\geometry\fbxnurbscurve.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\geometry\fbxnurbssurface.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\geometry\fbxopticalreference.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\geometry\fbxpatch.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\geometry\fbxproceduralgeometry.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\geometry\fbxshape.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\geometry\fbxskeleton.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\geometry\fbxskin.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\geometry\fbxsubdeformer.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\geometry\fbxsubdiv.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\geometry\fbxtrimnurbssurface.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\geometry\fbxvertexcachedeformer.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\geometry\fbxweightedmapping.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\shading\fbxbindingoperator.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\shading\fbxbindingsentryview.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\shading\fbxbindingtable.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\shading\fbxbindingtablebase.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\shading\fbxbindingtableentry.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\shading\fbxconstantentryview.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\shading\fbxentryview.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\shading\fbxfiletexture.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\shading\fbximplementation.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\shading\fbximplementationfilter.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\shading\fbximplementationutils.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\shading\fbxlayeredtexture.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\shading\fbxlayerentryview.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\shading\fbxoperatorentryview.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\shading\fbxproceduraltexture.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\shading\fbxpropertyentryview.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\shading\fbxsemanticentryview.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\shading\fbxshadingconventions.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\shading\fbxsurfacelambert.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\shading\fbxsurfacematerial.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\shading\fbxsurfacephong.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\scene\shading\fbxtexture.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\utils\fbxclonemanager.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\utils\fbxdeformationsevaluator.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\utils\fbxembeddedfilesaccumulator.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\utils\fbxgeometryconverter.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\utils\fbxmanipulators.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\utils\fbxmaterialconverter.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\utils\fbxnamehandler.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\utils\fbxprocessor.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\utils\fbxprocessorshaderdependency.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\utils\fbxprocessorxref.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\utils\fbxprocessorxrefuserlib.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\utils\fbxrenamingstrategy.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\utils\fbxrenamingstrategybase.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\utils\fbxrenamingstrategyfbx5.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\utils\fbxrenamingstrategyfbx6.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\utils\fbxrenamingstrategyfbx7.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\utils\fbxrenamingstrategyutilities.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\utils\fbxrootnodeutility.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\utils\fbxscenecheckutility.h" />
+    <ClInclude Include="dependencies\include\fbxsdk\fbxsdk\utils\fbxusernotification.h" />
+    <ClInclude Include="parser\flow.h" />
+    <ClInclude Include="parser\nodes.h" />
+    <ClInclude Include="parser\parser.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
