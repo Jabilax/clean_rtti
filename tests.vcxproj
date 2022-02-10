@@ -757,6 +757,8 @@
     </ClCompile>
     <ClCompile Include="source\serialization.cpp" />
     <ClCompile Include="source\utils.cpp" />
+    <ClCompile Include="tests\enums.cpp" />
+    <ClCompile Include="tests\structs.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="dependencies\include\glm\detail\func_common.inl" />

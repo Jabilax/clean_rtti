@@ -1,20 +1,23 @@
 #pragma once
 #include "flow.h"
+#include <functional>
 
-template<typename u, typename t>
-struct execute_node : public node
+using void_word_fn = std::function<void(const std::string& word)>;
+using bool_word_fn = std::function<bool(const std::string& word)>;
+
+struct ExecuteNode : public node
 {
-    execute_node(u expect_callback, t execute_callback, node* next_node)
+    ExecuteNode(bool_word_fn expect_callback, void_word_fn execute_callback, node_ptr& next_node)
         : expect_callback{ expect_callback }, execute_callback{ execute_callback }
         , next_node{ next_node }
     {}
 
-    bool execute(node*& next, const std::string& word) override
+    bool execute(node* next, const std::string& word) override
     {
         if (expect_callback)
         {
-            (*execute_callback)(word);
-            next = next_node;
+            execute_callback(word);
+            next = next_node.get();
             return true;
         }
         else
@@ -25,30 +28,29 @@ struct execute_node : public node
         }
     }
 
-    u expect_callback{ nullptr };
-    t execute_callback{ nullptr };
-    node* next_node{ nullptr };
+    bool_word_fn expect_callback;
+    void_word_fn execute_callback;
+    node_ptr next_node;
 };
 
-template<typename t>
-struct compare_node : public node
+struct CompareNode : public node
 {
-    compare_node(t compare_callback, node* true_node, node* false_node)
+    CompareNode(bool_word_fn compare_callback, node_ptr& true_node, node_ptr& false_node)
         : compare_callback{ compare_callback }
-        , true_node{ true_node }
-        , false_node{ false_node }
+        , true_node{ std::make_shared<node>(true_node) }
+        , false_node{ std::make_shared<node>(false_node) }
     {}
 
-    bool execute(node*& next, const std::string& word)
+    bool execute(node* next, const std::string& word)
     {
-        if ((*compare_callback)(word))
+        if (compare_callback(word))
         {
-            next = true_node;
+            next = true_node.get();
             return true;
         }
         else
         {
-            next = false_node;
+            next = false_node.get();
 
             if (false_node != nullptr)
             {
@@ -61,32 +63,31 @@ struct compare_node : public node
         }
     }
 
-    t compare_callback{ nullptr };
-    node* true_node{nullptr};
-    node* false_node{nullptr};
+    bool_word_fn compare_callback;
+    node_ptr true_node;
+    node_ptr false_node;
 };
 
-template<typename u, typename t>
-struct compare_execute_node : public node
+struct CompareExecute : public node
 {
-    compare_execute_node(u compare_callback, t execute_callback, node* true_node, node* false_node)
+    CompareExecute(bool_word_fn compare_callback, void_word_fn execute_callback, node_ptr& true_node, node_ptr& false_node)
         : compare_callback{ compare_callback }
         , execute_callback{ execute_callback }
         , true_node{ true_node }
         , false_node{ false_node }
     {}
 
-    bool execute(node*& next, const std::string& word)
+    bool execute(node* next, const std::string& word)
     {
-        if ((*compare_callback)(word))
+        if (compare_callback(word))
         {
             execute_callback(word);
-            next = true_node;
+            next = true_node.get();
             return true;
         }
         else
         {
-            next = false_node;
+            next = false_node.get();
 
             if (false_node != nullptr)
             {
@@ -99,17 +100,23 @@ struct compare_execute_node : public node
         }
     }
 
-    u compare_callback{ nullptr };
-    t execute_callback{ nullptr };
-    node* true_node{ nullptr };
-    node* false_node{ nullptr };
+    bool_word_fn compare_callback;
+    void_word_fn execute_callback;
+    node_ptr true_node;
+    node_ptr false_node;
 };
 
-#define execute_node(name, expect, execute, next_node) \
-execute_node<bool(*)(const std::string & word), void(*)(const std::string & word)> node { expect, execute, next_node }; name = &"local" name;
+auto execute_node = [](node_ptr& var, bool_word_fn expect, void_word_fn execute, node_ptr& next_node)
+{
+    var = std::make_shared<ExecuteNode>(expect, execute, next_node);
+};
 
-#define compare_node(name, compare, true_node, false_node) \
-compare_node<bool(*)(const std::string & word)> name{ compare, true_node, false_node };
+auto compare_node = [](node_ptr& var, bool_word_fn compare, node_ptr& true_node, node_ptr& false_node)
+{
+    var = std::make_shared<CompareNode>(compare, true_node, false_node);
+};
 
-#define compexe_node(name, compare, execute, true_node, false_node) \
-compare_execute_node<bool(*)(const std::string & word), void(*)(const std::string & word)> name{ compare, execute, true_node, false_node };
+auto compexe_node = [](node_ptr& var, bool_word_fn compare, void_word_fn execute, node_ptr& true_node, node_ptr& false_node)
+{
+    var = std::make_shared<CompareExecute>(compare, execute, true_node, false_node);
+};

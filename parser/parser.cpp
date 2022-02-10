@@ -126,7 +126,7 @@ void Parser::tokenize(const std::string& text)
         word.push_back(text[i]);
     }
 
-    if(!word.empty())
+    if (!word.empty())
         stream(word);
 }
 
