@@ -38,16 +38,22 @@ Flow<T>::Flow(FutureFlowNode<T> start)
 }
 
 template<class T>
-auto Flow<T>::start(T& data) -> bool
+void Flow<T>::start(T& data)
 {
     return start_node->execute(next_node, data);
 }
 
 template<class T>
-auto Flow<T>::next(T& data) -> bool
+void Flow<T>::next(T& data)
 {
     assert(next_node != nullptr);
     return next_node->execute(next_node, data);
+}
+
+template<class T>
+auto Flow<T>::is_finished() -> bool
+{
+    return next_node == nullptr;
 }
 
 template<class T>
@@ -58,13 +64,12 @@ ExecuteNode<T>::ExecuteNode(BoolNodeFn<T> expect_callback, VoidNodeFn<T> execute
 }
 
 template<class T>
-auto ExecuteNode<T>::execute(FlowNodePtr<T>& next, T& data) -> bool
+void ExecuteNode<T>::execute(FlowNodePtr<T>& next, T& data)
 {
     if (expect_callback)
     {
         execute_callback(data);
         next = next_node.get();
-        return true;
     }
     else
     {
@@ -82,12 +87,11 @@ CompareNode<T>::CompareNode(BoolNodeFn<T> compare_callback, FutureFlowNode<T> tr
 {}
 
 template<class T>
-auto CompareNode<T>::execute(FlowNodePtr<T>& next, T& data) -> bool
+void CompareNode<T>::execute(FlowNodePtr<T>& next, T& data)
 {
     if (compare_callback(data))
     {
         next = true_node.get();
-        return true;
     }
     else
     {
@@ -95,11 +99,7 @@ auto CompareNode<T>::execute(FlowNodePtr<T>& next, T& data) -> bool
 
         if (false_node.get() != nullptr)
         {
-            return false_node->execute(next, data);
-        }
-        else
-        {
-            return false;
+            false_node->execute(next, data);
         }
     }
 }
@@ -113,13 +113,12 @@ CompareExecuteNode<T>::CompareExecuteNode(BoolNodeFn<T> compare_callback, VoidNo
 {}
 
 template<class T>
-auto CompareExecuteNode<T>::execute(FlowNodePtr<T>& next, T& data) -> bool
+void CompareExecuteNode<T>::execute(FlowNodePtr<T>& next, T& data)
 {
     if (compare_callback(data))
     {
         execute_callback(data);
         next = true_node.get();
-        return true;
     }
     else
     {
@@ -127,11 +126,7 @@ auto CompareExecuteNode<T>::execute(FlowNodePtr<T>& next, T& data) -> bool
 
         if (false_node.get() != nullptr)
         {
-            return false_node->execute(next, data);
-        }
-        else
-        {
-            return false;
+            false_node->execute(next, data);
         }
     }
 }
@@ -145,7 +140,7 @@ CompareExecuteWaitNode<T>::CompareExecuteWaitNode(BoolNodeFn<T> compare_callback
 {}
 
 template<class T>
-auto CompareExecuteWaitNode<T>::execute(FlowNodePtr<T>& next, T& data) -> bool
+void CompareExecuteWaitNode<T>::execute(FlowNodePtr<T>& next, T& data)
 {
     if (compare_callback(data))
     {
@@ -156,8 +151,6 @@ auto CompareExecuteWaitNode<T>::execute(FlowNodePtr<T>& next, T& data) -> bool
     {
         next = false_node.get();
     }
-
-    return true;
 }
 
 template<class T>
@@ -170,7 +163,7 @@ SwitchWaitNode<T>::SwitchWaitNode(BoolNodeFn<T> first_compare, BoolNodeFn<T> sec
 {}
 
 template<class T>
-auto SwitchWaitNode<T>::execute(FlowNodePtr<T>& next, T& data) -> bool
+void SwitchWaitNode<T>::execute(FlowNodePtr<T>& next, T& data)
 {
     if (first_compare(data))
     {
@@ -184,6 +177,4 @@ auto SwitchWaitNode<T>::execute(FlowNodePtr<T>& next, T& data) -> bool
     {
         next = none_node.get();
     }
-
-    return true;
 }

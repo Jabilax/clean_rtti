@@ -16,8 +16,9 @@ struct Flow
     Flow(FutureFlowNode<T> start);
 
     // Returns if the flow is exectuting.
-    auto start(T& data) -> bool;
-    auto next(T& data) -> bool;
+    void start(T& data);
+    void next(T& data);
+    auto is_finished() -> bool;
 
 private:
     FutureFlowNodeRef<T> start_node;
@@ -28,7 +29,7 @@ private:
 template<class T>
 struct FlowNode
 {
-    virtual auto execute(FlowNodePtr<T>& next, T& data) -> bool = 0;
+    virtual void execute(FlowNodePtr<T>& next, T& data) = 0;
 };
 
 // This is a node that may be initialized in the future.
@@ -58,7 +59,7 @@ template<class T>
 struct ExecuteNode : public FlowNode<T>
 {
     ExecuteNode(BoolNodeFn<T> expect_callback, VoidNodeFn<T> execute_callback, FutureFlowNode<T> next_node);
-    auto execute(FlowNodePtr<T>& next, T& data) -> bool final;
+    void execute(FlowNodePtr<T>& next, T& data) final;
 
     BoolNodeFn<T> expect_callback;
     VoidNodeFn<T> execute_callback;
@@ -70,7 +71,7 @@ template<class T>
 struct CompareNode : public FlowNode<T>
 {
     CompareNode(BoolNodeFn<T> compare_callback, FutureFlowNode<T> true_node, FutureFlowNode<T> false_node);
-    auto execute(FlowNodePtr<T>& next, T& data) -> bool final;
+    void execute(FlowNodePtr<T>& next, T& data) final;
 
     BoolNodeFn<T> compare_callback;
     FutureFlowNodeRef<T> true_node;
@@ -82,7 +83,7 @@ template<class T>
 struct CompareExecuteNode : public FlowNode<T>
 {
     CompareExecuteNode(BoolNodeFn<T> compare_callback, VoidNodeFn<T> execute_callback, FutureFlowNode<T> true_node, FutureFlowNode<T> false_node);
-    auto execute(FlowNodePtr<T>& next, T& data) -> bool final;
+    void execute(FlowNodePtr<T>& next, T& data) final;
 
     BoolNodeFn<T> compare_callback;
     VoidNodeFn<T> execute_callback;
@@ -95,7 +96,7 @@ template<class T>
 struct CompareExecuteWaitNode : public FlowNode<T>
 {
     CompareExecuteWaitNode(BoolNodeFn<T> compare_callback, VoidNodeFn<T> execute_callback, FutureFlowNode<T> true_node, FutureFlowNode<T> false_node);
-    auto execute(FlowNodePtr<T>& next, T& data) -> bool final;
+    void execute(FlowNodePtr<T>& next, T& data) final;
 
     BoolNodeFn<T> compare_callback;
     VoidNodeFn<T> execute_callback;
@@ -108,7 +109,7 @@ template<class T>
 struct SwitchWaitNode : public FlowNode<T>
 {
     SwitchWaitNode(BoolNodeFn<T> first_compare, BoolNodeFn<T> second_compare, FutureFlowNode<T> first_node, FutureFlowNode<T> second_node, FutureFlowNode<T> none_node);
-    auto execute(FlowNodePtr<T>& next, T& data) -> bool final;
+    void execute(FlowNodePtr<T>& next, T& data) final;
 
     BoolNodeFn<T> first_compare;
     BoolNodeFn<T> second_compare;

@@ -12,7 +12,8 @@
 int main()
 {
     ParserCpp parser;
-    parser.parse_file("C:\\Repositories\\clean_rtti\\source\\generic_parser\\flow.h");
+    parser.parse_file("C:\\Repositories\\clean_rtti\\tests\\enums.cpp");
+    //parser.parse_file("C:\\Repositories\\clean_rtti\\source\\generic_parser\\flow.h");
 
     return 0;
 }

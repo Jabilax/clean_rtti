@@ -14,6 +14,7 @@ struct ParsingData
     bool inside_comment{ false };
     bool inside_string{ false };
     bool prev_token_is_backslash{ false };
+    int template_scope{ 0 };
 
     std::string word;
 };
@@ -104,23 +105,26 @@ void ParserCpp::tokenize(Parser<WordData>& parser, ParsingData& parsing_data, ch
         return false;
     };
 
-    auto separation_tokens = { ' ' , '\t', '\n' };
+    auto separation_tokens = { ' ' , '\t', '\n', ';', ',', '(', ')', '{', '}', '=' };
+    auto include_tokens = { '\n', ';', ',', '(', ')', '{', '}' };
 
-    if (contains(separation_tokens, token))
+    if (!parsing_data.inside_comment && !parsing_data.inside_string && (parsing_data.template_scope == 0) && contains(separation_tokens, token))
     {
         if (!parsing_data.word.empty())
         {
             parser.push(WordData{ parsing_data, parsing_data.word });
             parsing_data.word.clear();
         }
+
+        if (contains(include_tokens, token))
+        {
+            parser.push(WordData{ parsing_data, std::string(1, token) });
+        }
     }
     else
     {
         parsing_data.word.push_back(token);
     }
-
-    // parser.remove_tokens = { ' ' , '\t', '\n' };
-    // parser.insert_tokens = { ':', ',', ';', '{', '}', '(', ')', '<', '>', '*', '&', '=' };
 }
 
 
@@ -173,14 +177,15 @@ void ParserCpp::create_flows()
     auto join = []<class T>(BoolFn<T> fn_1, BoolFn<T> fn_2) -> BoolFn<T> { auto a = fn_1; auto b = fn_2; return [a, b](T& data) { return a(data) && b(data); }; };
 
     // Token
-    auto set_inside_comment     = [](bool value) { return (TokenVoidFn)[value](TokenData& data) { data.parsing.inside_comment = value; }; };
-    auto set_inside_string      = [](bool value) { return (TokenVoidFn)[value](TokenData& data) { data.parsing.inside_string = value; }; };
-    auto set_prev_backslash     = [](bool value) { return (TokenVoidFn)[value](TokenData& data) { data.parsing.prev_token_is_backslash = value; }; };
-    auto is_prev_backslash      = [](bool value) { return (TokenBoolFn)[value](TokenData& data) { return data.parsing.prev_token_is_backslash == value; }; };
-    auto is_in_string           = [](bool value) { return (TokenBoolFn)[value](TokenData& data) { return data.parsing.inside_string == value; }; };
-    auto is_token               = [](const std::string& string) { return (TokenBoolFn)[string](const TokenData& data) { return data.text.substr(data.text_index, string.size()) == string; }; };
-    auto is_token_not_ignored   = (TokenBoolFn)[](TokenData& data) { return !data.parsing.inside_comment && !data.parsing.inside_string; };
-    auto expect_any_token       = (TokenBoolFn)[](TokenData&) { return true; };
+    auto set_inside_comment       = [](bool value) { return (TokenVoidFn)[value](TokenData& data) { data.parsing.inside_comment = value; }; };
+    auto set_inside_string        = [](bool value) { return (TokenVoidFn)[value](TokenData& data) { data.parsing.inside_string = value; }; };
+    auto set_prev_backslash       = [](bool value) { return (TokenVoidFn)[value](TokenData& data) { data.parsing.prev_token_is_backslash = value; }; };
+    auto is_prev_backslash        = [](bool value) { return (TokenBoolFn)[value](TokenData& data) { return data.parsing.prev_token_is_backslash == value; }; };
+    auto is_in_string             = [](bool value) { return (TokenBoolFn)[value](TokenData& data) { return data.parsing.inside_string == value; }; };
+    auto increment_template_scope = [](int value)  { return (TokenVoidFn)[value](TokenData& data) { data.parsing.template_scope += value; }; };
+    auto is_token                 = [](const std::string& string) { return (TokenBoolFn)[string](const TokenData& data) { return data.text.substr(data.text_index, string.size()) == string; }; };
+    auto is_token_not_ignored     = (TokenBoolFn)[](TokenData& data) { return !data.parsing.inside_comment && !data.parsing.inside_string; };
+    auto expect_any_token         = (TokenBoolFn)[](TokenData&) { return true; };
 
     // Word
     auto is_word                = [](const std::string& string) { return (WordBoolFn)[string](const WordData& data) { return data.word == string; }; };
@@ -220,6 +225,15 @@ void ParserCpp::create_flows()
         compare_execute_node(A, join(is_token("\""), is_token_not_ignored), set_inside_string(true), B, null);
         compare_execute_wait_node(B, join(is_token("\""), is_prev_backslash(false)), set_inside_string(false), null, B);
         m->token_parser.add_flow(A);
+    }
+
+    // -------------------------------------- Template Scope Flow -----------------------------------------
+    {
+        TokenNode A, B, null;
+        compare_execute_wait_node(A, join(is_token("<"), is_token_not_ignored), increment_template_scope(1), null, null);
+        compare_execute_wait_node(B, join(is_token(">"), is_token_not_ignored), increment_template_scope(-1), null, null);
+        m->token_parser.add_flow(A);
+        m->token_parser.add_flow(B);
     }
     
     // ---------------------------------------- BackSlash Flow --------------------------------------------
