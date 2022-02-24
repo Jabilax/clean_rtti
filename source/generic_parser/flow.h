@@ -90,4 +90,32 @@ struct CompareExecuteNode : public FlowNode<T>
     FutureFlowNodeRef<T> false_node;
 };
 
+// Same as CompareExecuteNode but it consumes the data. Previously false node would get called with the same data as this.
+template<class T>
+struct CompareExecuteWaitNode : public FlowNode<T>
+{
+    CompareExecuteWaitNode(BoolNodeFn<T> compare_callback, VoidNodeFn<T> execute_callback, FutureFlowNode<T> true_node, FutureFlowNode<T> false_node);
+    auto execute(FlowNodePtr<T>& next, T& data) -> bool final;
+
+    BoolNodeFn<T> compare_callback;
+    VoidNodeFn<T> execute_callback;
+    FutureFlowNodeRef<T> true_node;
+    FutureFlowNodeRef<T> false_node;
+};
+
+// Switch Node.
+template<class T>
+struct SwitchWaitNode : public FlowNode<T>
+{
+    SwitchWaitNode(BoolNodeFn<T> first_compare, BoolNodeFn<T> second_compare, FutureFlowNode<T> first_node, FutureFlowNode<T> second_node, FutureFlowNode<T> none_node);
+    auto execute(FlowNodePtr<T>& next, T& data) -> bool final;
+
+    BoolNodeFn<T> first_compare;
+    BoolNodeFn<T> second_compare;
+    FutureFlowNodeRef<T> first_node;
+    FutureFlowNodeRef<T> second_node;
+    FutureFlowNodeRef<T> none_node;
+};
+
+
 #include "generic_parser/flow.inl"
