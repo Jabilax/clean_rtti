@@ -116,17 +116,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="source\parser_cpp.cpp" />
+    <ClCompile Include="source\parser.cpp" />
     <ClCompile Include="source\main.cpp" />
+    <ClCompile Include="source\reflection.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="source\generic_parser\flow.h" />
-    <ClInclude Include="source\generic_parser\parser.h" />
-    <ClInclude Include="source\parser_cpp.h" />
+    <ClInclude Include="source\generic\node_graph.h" />
+    <ClInclude Include="source\generic\flow_graph.h" />
+    <ClInclude Include="source\parser.h" />
+    <ClInclude Include="source\reflection.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="source\generic_parser\flow.inl" />
-    <None Include="source\generic_parser\parser.inl" />
+    <None Include="source\generic\node_graph.inl" />
+    <None Include="source\generic\flow_graph.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

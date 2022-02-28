@@ -1,12 +1,12 @@
 
 template<class T>
-void Parser<T>::add_flow(FutureFlowNode<T> start_node)
+void FlowGraph<T>::add_node_graph(FutureNode<T> start_node)
 {
     flows.emplace_back(start_node);
 }
 
 template<class T>
-void Parser<T>::push(T&& data)
+void FlowGraph<T>::push(T&& data)
 {
     // Continue execution on previous active flows.
     for (auto it = active_flows.begin(); it != active_flows.end();)

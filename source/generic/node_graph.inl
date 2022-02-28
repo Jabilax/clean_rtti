@@ -1,70 +1,72 @@
 #include <cassert>
 
 template<class T>
-FutureFlowNode<T>::FutureFlowNode()
-    : ptr{ new FlowNodePtr<T>{ nullptr } }
+FutureNode<T>::FutureNode()
+    : ptr{ new NodePtr<T>{ nullptr } }
 {
 }
 
 template<class T>
-void FutureFlowNode<T>::set(FlowNodePtr<T> node)
+void FutureNode<T>::set(NodePtr<T> node)
 {
     *ptr = node;
 }
 
 template<class T>
-FutureFlowNodeRef<T>::FutureFlowNodeRef(FutureFlowNode<T> node)
+FutureNodeRef<T>::FutureNodeRef(FutureNode<T> node)
     : ptr{node.ptr}
 {
 }
 
 template<class T>
-auto FutureFlowNodeRef<T>::operator->() -> FlowNodePtr<T>
+auto FutureNodeRef<T>::operator->() -> NodePtr<T>
 {
     return *ptr;
 }
 
 template<class T>
-auto FutureFlowNodeRef<T>::get() -> FlowNodePtr<T>
+auto FutureNodeRef<T>::get() -> NodePtr<T>
 {
     return *ptr;
 }
 
 template<class T>
-Flow<T>::Flow(FutureFlowNode<T> start)
+NodeGraph<T>::NodeGraph(FutureNode<T> start)
     : start_node{ start }
     , next_node{ nullptr }
 {
 }
 
 template<class T>
-void Flow<T>::start(T& data)
+void NodeGraph<T>::start(T& data)
 {
     return start_node->execute(next_node, data);
 }
 
 template<class T>
-void Flow<T>::next(T& data)
+void NodeGraph<T>::next(T& data)
 {
     assert(next_node != nullptr);
     return next_node->execute(next_node, data);
 }
 
 template<class T>
-auto Flow<T>::is_finished() -> bool
+auto NodeGraph<T>::is_finished() -> bool
 {
     return next_node == nullptr;
 }
 
 template<class T>
-ExecuteNode<T>::ExecuteNode(BoolNodeFn<T> expect_callback, VoidNodeFn<T> execute_callback, FutureFlowNode<T> next_node)
-    : expect_callback{ expect_callback }, execute_callback{ execute_callback }
+ExecuteNode<T>::ExecuteNode(BoolNodeFn<T> expect_callback, VoidNodeFn<T> execute_callback, FutureNode<T> next_node, const std::string& name)
+    : expect_callback{ expect_callback }
+    , execute_callback{ execute_callback }
     , next_node{ next_node }
+    , name{ name }
 {
 }
 
 template<class T>
-void ExecuteNode<T>::execute(FlowNodePtr<T>& next, T& data)
+void ExecuteNode<T>::execute(NodePtr<T>& next, T& data)
 {
     if (expect_callback)
     {
@@ -80,14 +82,15 @@ void ExecuteNode<T>::execute(FlowNodePtr<T>& next, T& data)
 }
 
 template<class T>
-CompareNode<T>::CompareNode(BoolNodeFn<T> compare_callback, FutureFlowNode<T> true_node, FutureFlowNode<T> false_node)
+CompareNode<T>::CompareNode(BoolNodeFn<T> compare_callback, FutureNode<T> true_node, FutureNode<T> false_node, const std::string& name)
     : compare_callback{ compare_callback }
     , true_node{ true_node }
     , false_node{ false_node }
+    , name{ name }
 {}
 
 template<class T>
-void CompareNode<T>::execute(FlowNodePtr<T>& next, T& data)
+void CompareNode<T>::execute(NodePtr<T>& next, T& data)
 {
     if (compare_callback(data))
     {
@@ -105,15 +108,16 @@ void CompareNode<T>::execute(FlowNodePtr<T>& next, T& data)
 }
 
 template<class T>
-CompareExecuteNode<T>::CompareExecuteNode(BoolNodeFn<T> compare_callback, VoidNodeFn<T> execute_callback, FutureFlowNode<T> true_node, FutureFlowNode<T> false_node)
+CompareExecuteNode<T>::CompareExecuteNode(BoolNodeFn<T> compare_callback, VoidNodeFn<T> execute_callback, FutureNode<T> true_node, FutureNode<T> false_node, const std::string& name)
     : compare_callback{ compare_callback }
     , execute_callback{ execute_callback }
     , true_node{ true_node }
     , false_node{ false_node }
+    , name{ name }
 {}
 
 template<class T>
-void CompareExecuteNode<T>::execute(FlowNodePtr<T>& next, T& data)
+void CompareExecuteNode<T>::execute(NodePtr<T>& next, T& data)
 {
     if (compare_callback(data))
     {
@@ -132,15 +136,16 @@ void CompareExecuteNode<T>::execute(FlowNodePtr<T>& next, T& data)
 }
 
 template<class T>
-CompareExecuteWaitNode<T>::CompareExecuteWaitNode(BoolNodeFn<T> compare_callback, VoidNodeFn<T> execute_callback, FutureFlowNode<T> true_node, FutureFlowNode<T> false_node)
+CompareExecuteWaitNode<T>::CompareExecuteWaitNode(BoolNodeFn<T> compare_callback, VoidNodeFn<T> execute_callback, FutureNode<T> true_node, FutureNode<T> false_node, const std::string& name)
     : compare_callback{ compare_callback }
     , execute_callback{ execute_callback }
     , true_node{ true_node }
     , false_node{ false_node }
+    , name{ name }
 {}
 
 template<class T>
-void CompareExecuteWaitNode<T>::execute(FlowNodePtr<T>& next, T& data)
+void CompareExecuteWaitNode<T>::execute(NodePtr<T>& next, T& data)
 {
     if (compare_callback(data))
     {
@@ -154,16 +159,17 @@ void CompareExecuteWaitNode<T>::execute(FlowNodePtr<T>& next, T& data)
 }
 
 template<class T>
-SwitchWaitNode<T>::SwitchWaitNode(BoolNodeFn<T> first_compare, BoolNodeFn<T> second_compare, FutureFlowNode<T> first_node, FutureFlowNode<T> second_node, FutureFlowNode<T> none_node)
+SwitchWaitNode<T>::SwitchWaitNode(BoolNodeFn<T> first_compare, BoolNodeFn<T> second_compare, FutureNode<T> first_node, FutureNode<T> second_node, FutureNode<T> none_node, const std::string& name)
     : first_compare{ first_compare }
     , second_compare{ second_compare }
     , first_node{ first_node }
     , second_node{ second_node }
     , none_node{ none_node }
+    , name{ name }
 {}
 
 template<class T>
-void SwitchWaitNode<T>::execute(FlowNodePtr<T>& next, T& data)
+void SwitchWaitNode<T>::execute(NodePtr<T>& next, T& data)
 {
     if (first_compare(data))
     {
