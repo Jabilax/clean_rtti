@@ -30,9 +30,6 @@ namespace Widgets::Canvas
 // some comment
 enum EnumWithCustomType : short { first, second, third };
 
-struct MyStruct
-{
-};
 
 void enum_tests()
 {

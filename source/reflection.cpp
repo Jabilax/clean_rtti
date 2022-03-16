@@ -44,10 +44,14 @@ void generate_reflection_info(const fs::path& file_path, const ParsedData& data)
 void generate_reflection_info(std::ofstream& file, const ParsedData& data)
 {
     file << "#pragma once\n";
-    file << "#include <array>\n\n";
+    file << "#include <array>\n";
+    file << "#include <vector>\n\n";
+
     file << "template<class T2, class T = T2> struct Reflect {};\n";
     file << "template<class T2, class T = T2> struct MemberVariable {};\n";
-    file << "template<class T> struct EnumValue { const char* name; T value; };\n\n";
+    file << "template<class T> struct EnumValue { const char* name; T value; };\n";
+    file << "struct Attribute { const char* name; std::vector<const char*> arguments; };\n\n";
+
     generate_enum_reflection_info(file, data);
     generate_struct_reflection_info(file, data);
 }
@@ -98,20 +102,40 @@ void generate_struct_reflection_info(std::ofstream& file, const ParsedData& data
     file << "template<class T>\n";
     file << "struct MemberVariable<" << struct_type.name << ", T>\n";
     file << "{\n";
-    file << "    constexpr MemberVariable(const char* name, int index) : name{ name }, index{ index } {}\n";
-    file << "\n";
+    file << "    constexpr MemberVariable(const char* name, int index) : name{ name }, index{ index } {}\n\n";
+
+    // ---------------------------------------------- Get variable ------------------------------------------------
     file << "    template<class Fn>\n";
-    file << "    void apply(T& object, Fn callback) const\n";
+    file << "    void get(const T& object, Fn callback) const\n";
     file << "    {\n";
     file << "        switch (index)\n";
     file << "        {\n";
     for (int i = 0; auto& var : struct_type.variables)
     file << "        case " << i++ << ": callback(object." << var.name << "); break;\n";
     file << "        }\n";
-    file << "    }\n";
-    file << "\n";
-    file << "    const char* name;\n";
-    file << "\n";
+    file << "    }\n\n";
+
+    // ------------------------------------------------ Attributes ------------------------------------------------
+    file << "    auto attributes() -> std::vector<Attribute> const\n";
+    file << "    {\n";
+    file << "        switch (index)\n";
+    file << "        {\n";
+    for (int i = 0; auto& var : struct_type.variables)
+    {
+    if(!var.attributes.empty())
+    {
+    file << "        case " << i++ << ": return std::vector<Attribute> {\n";
+    for (auto& attribute : var.attributes)
+    file << "                Attribute{\"" << attribute.name << "\", std::vector<const char*>{}},\n";
+    file << "            };\n";
+    }
+    }
+    file << "        }\n";
+    file << "        return std::vector<Attribute>{};\n";
+    file << "    }\n\n";
+
+    file << "    const char* name;\n\n";
+
     file << "private:\n";
     file << "    int index;\n";
     file << "};\n\n";

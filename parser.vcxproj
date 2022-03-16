@@ -121,6 +121,7 @@
     <ClCompile Include="source\reflection.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="source\base_reflection.h" />
     <ClInclude Include="source\generic\node_graph.h" />
     <ClInclude Include="source\generic\flow_graph.h" />
     <ClInclude Include="source\parser.h" />

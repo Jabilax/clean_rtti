@@ -26,15 +26,20 @@ struct ParsingData
     int  scope_counter{ 0 };
     int  function_scope{ 0 };
     int  parentheses_scope{ 0 };
+    int  square_scope{ 0 };
     std::vector<Namespace> namespaces;
+    std::vector<Attribute> attributes;
 
+    auto is_inside_attribute() { return square_scope > 0; } // 1 Can be since when parsing [[data]] it sends the word after parsing the ] bit
     auto is_inside_comment() { return inside_block_comment || inside_line_comment; }
     auto is_inside_template() { return template_scope_counter > 0; }
     auto is_inside_function() { return function_scope > 0; }
     auto is_inside_parentheses() { return parentheses_scope > 0; }
-    auto get_namespace_scope() { 
-        std::string word;
-        for (auto& namespace_type : namespaces) { word += (word.empty() ? "" : "::") + (namespace_type.name); }
+
+    auto get_namespace_scope()
+    {
+        std::string word{};
+        for (auto & namespace_type : namespaces) { word += (word.empty() ? "" : "::") + (namespace_type.name); }
         return word;
     }
 
@@ -119,8 +124,10 @@ void Parser::read_token(ParsingData& parsing_data, const std::string& text, int 
     {
         if (is_string_equal("//")) { parsing_data.inside_line_comment = true;  }
         if (is_string_equal("/*")) { parsing_data.inside_block_comment = true; }
-        if (token == '\"' && !is_prev_token_equal('\\'))  { parsing_data.inside_string = !parsing_data.inside_string; }
-        if (token == '{'){ parsing_data.scope_counter++; }
+        if (token == '\"' && !is_prev_token_equal('\\')) { parsing_data.inside_string = !parsing_data.inside_string; }
+        if (token == '[') { parsing_data.square_scope++; }
+        if (token == ']') { parsing_data.square_scope--; }
+        if (token == '{') { parsing_data.scope_counter++; }
         if (token == '}')
         {
             parsing_data.scope_counter--;
@@ -156,7 +163,7 @@ void Parser::tokenize(FlowGraph<WordData>& word_flow, ParsingData& parsing_data,
         return false;
     };
 
-    const auto separation_tokens = { ' ' , '\t', '\n', ';', ',', '(', ')', '{', '}', '=' };
+    const auto separation_tokens = { ' ' , '\t', '\n', ';', ',', '(', ')', '{', '}', '=', '[', ']'};
     const auto include_tokens = { ';', ',', '(', ')', '{', '}', '=' };
 
     if (!parsing_data.is_inside_comment() && !parsing_data.is_inside_template() && !parsing_data.is_inside_function() && contains(separation_tokens, token))
@@ -203,13 +210,53 @@ auto Parser::read_file(const fs::path& path) -> std::optional<std::string>
     return text;
 }
 
+// Usings.
+using FNode = FutureNode<WordData>;
+using BoolFn = BoolNodeFn<WordData>;
+using VoidFn = VoidNodeFn<WordData>;
+
+auto create_struct = (VoidFn)[](WordData& data)
+{
+    auto& _struct = data.parsing.parsed.structs.emplace_back();
+    _struct.name = "Unnamed"; // For testing in case it foes wrong.
+    _struct.scope = data.parsing.scope_counter + 1; // We haven't yet reached the open {
+    _struct.type = data.word; // Either class or struct.
+    _struct.namespace_scope = data.parsing.get_namespace_scope();
+
+    data.parsing.attributes.clear(); // They should be empty.
+    data.parsing.inside_struct = true;
+};
+
+auto create_struct_variable = (VoidFn)[](WordData& data)
+{
+    auto& variable = data.parsing.parsed.structs.back().variables.emplace_back();
+    variable.name = data.parsing.var_name;
+    variable.attributes = data.parsing.attributes;
+
+    data.parsing.attributes.clear();
+};
+
+auto create_struct_function = (VoidFn)[](WordData& data)
+{
+    auto& function = data.parsing.parsed.structs.back().functions.emplace_back();
+    function.name = data.parsing.var_name;
+    function.attributes = data.parsing.attributes;
+
+    data.parsing.attributes.clear();
+};
+
+auto set_struct_name = (VoidFn)[](WordData& data)
+{
+    auto& _struct = data.parsing.parsed.structs.back();
+    _struct.name = data.word;
+    // Attributes are defined after the struct/class keyword, so they are only available when setting the name.
+    _struct.attributes = data.parsing.attributes;
+
+    data.parsing.attributes.clear();
+};
+
 void Parser::create_flows()
 {
-    // Usings.
-    using FNode   = FutureNode<WordData>;
-    using BoolFn  = BoolNodeFn<WordData>;
-    using VoidFn  = VoidNodeFn<WordData>;
-
     // Nodes.
     auto execute_node              = [](FNode fnode, BoolFn expect, VoidFn execute, FNode next_node, std::string debug_name = "") { fnode.set(new ExecuteNode(expect, execute, next_node, debug_name)); };
     auto compare_node              = [](FNode fnode, BoolFn compare, FNode true_node, FNode false_node, std::string debug_name = "") { fnode.set(new CompareNode(compare, true_node, false_node, debug_name)); };
@@ -218,15 +265,13 @@ void Parser::create_flows()
     auto switch_wait_node          = [](FNode fnode, BoolFn compare_1, BoolFn compare_2, FNode node_1, FNode node_2, FNode node_none, std::string debug_name = "") { fnode.set(new SwitchWaitNode(compare_1, compare_2, node_1, node_2, node_none, debug_name)); };
 
     // Helpers.
-    auto is_equal            = [](const std::string& string) { return (BoolFn)[string](const WordData& data) { return data.word == string; }; };
-    auto is_name             = (BoolFn)[](WordData& data) { 
-        return std::isalpha(data.word[0]); 
-    };
-    auto is_number           = (BoolFn)[](WordData& data) { return std::isdigit(data.word[0]); };
-    auto expect_any_word     = (BoolFn)[](WordData& data) { return true; };
-    auto do_nothing          = (VoidFn)[](WordData& data) {};
-    auto join                = [](BoolFn fn_1, BoolFn fn_2) { auto a = fn_1; auto b = fn_2; return [a, b](WordData& data) { return a(data) && b(data); }; };
-    auto join_or             = [](BoolFn fn_1, BoolFn fn_2) { auto a = fn_1; auto b = fn_2; return [a, b](WordData& data) { return a(data) || b(data); }; };
+    auto is_equal        = [](const std::string& string) { return (BoolFn)[string](const WordData& data) { return data.word == string; }; };
+    auto is_name         = (BoolFn)[](WordData& data) { return !data.parsing.is_inside_attribute() && std::isalpha(data.word[0]); };
+    auto is_number       = (BoolFn)[](WordData& data) { return std::isdigit(data.word[0]); };
+    auto expect_any_word = (BoolFn)[](WordData& data) { return true; };
+    auto do_nothing      = (VoidFn)[](WordData& data) {};
+    auto join            = [](BoolFn fn_1, BoolFn fn_2) { auto a = fn_1; auto b = fn_2; return [a, b](WordData& data) { return a(data) && b(data); }; };
+    auto join_or         = [](BoolFn fn_1, BoolFn fn_2) { auto a = fn_1; auto b = fn_2; return [a, b](WordData& data) { return a(data) || b(data); }; };
 
     // Enums.
     auto create_enum     = (VoidFn)[](WordData& data) { data.parsing.parsed.enums.emplace_back("Missing Name", false, "int", data.parsing.get_namespace_scope(), std::vector<std::string>{}); data.parsing.inside_enum = true; };
@@ -246,20 +291,17 @@ void Parser::create_flows()
 
     // Structs.
     auto is_struct_definition = (BoolFn)[](WordData& data) { return !data.parsing.inside_enum && (data.word == "class" || data.word == "struct"); };
-    auto create_struct        = (VoidFn)[](WordData& data) { data.parsing.parsed.structs.push_back(Struct{"Missing_Name", data.parsing.scope_counter + 1, data.word, data.parsing.get_namespace_scope(), std::vector<Variable>{} }); data.parsing.inside_struct = true; };
-    auto set_struct_name      = (VoidFn)[](WordData& data) { data.parsing.parsed.structs.back().name = data.word; };
     auto remove_struct        = (VoidFn)[](WordData& data) { data.parsing.parsed.structs.pop_back(); data.parsing.inside_struct = false; };
     auto is_struct_ended      = (BoolFn)[](WordData& data) { return data.parsing.parsed.structs.back().scope > data.parsing.scope_counter; };
     auto set_finish_struct    = (VoidFn)[](WordData& data) { data.parsing.inside_struct = false; };
     auto is_inside_struct     = (BoolFn)[](WordData& data) { return data.parsing.inside_struct; };
 
-    // Variables
-    auto set_variable_name    = (VoidFn)[](WordData& data) { 
-        data.parsing.var_name = data.word; 
-    };
-    auto create_variable      = (VoidFn)[](WordData& data) { 
-        data.parsing.parsed.structs.back().variables.emplace_back(data.parsing.var_name);
-    };
+    // Struct variables
+    auto set_variable_name    = (VoidFn)[](WordData& data) { data.parsing.var_name = data.word; };
+
+    // Attributes
+    auto is_inside_attribute  = (BoolFn)[](WordData& data) { return data.parsing.is_inside_attribute(); };
+    auto create_attribute     = (VoidFn)[](WordData& data) { data.parsing.attributes.emplace_back().name = data.word; };
 
 
     // ------------------------------------------- Enums ----------------------------------------------
@@ -299,27 +341,25 @@ void Parser::create_flows()
     {
         FNode A, B, C, D, E, F, G, H, I, J, null;
         compare_execute_node(A, is_struct_definition, create_struct, B, null);
-        execute_node(B, is_name, set_struct_name, C);
+        compare_execute_wait_node(B, is_name, set_struct_name, C, B);
 
         compare_execute_node(C, is_equal(";"), remove_struct, null, I, "C");
         compare_execute_wait_node(I, is_equal("{"), do_nothing, E, C, "I");
 
         compare_execute_node(E, is_name, set_variable_name, E, F, "E");
-        compare_execute_node(F, is_equal(";"), create_variable, E, H, "F");
-        compare_execute_node(H, join_or(is_equal("="), is_equal("{")), create_variable, G, J, "H");
-        compare_node(J, is_equal("("), G, D);
+        compare_execute_node(F, is_equal(";"), create_struct_variable, E, H, "F");
+        compare_execute_node(H, join_or(is_equal("="), is_equal("{")), create_struct_variable, G, J, "H");
+        compare_execute_node(J, is_equal("("), create_struct_function, G, D);
         compare_execute_wait_node(G, is_equal(";"), do_nothing, D, G, "G");
 
         compare_execute_wait_node(D, is_struct_ended, set_finish_struct, null, E, "D");
         m->word_flow.add_node_graph(A);
     }
 
-    //{
-    //    FNode A, B, C, D, null;
-    //    compare_execute_node(A, is_inside_struct, create_struct, B, null);
-    //    execute_node(B, is_name, set_struct_name, C);
-    //    compare_execute_node(C, is_equal(";"), remove_struct, null, D);
-    //    compare_execute_wait_node(D, is_struct_ended, set_finish_struct, null, D);
-    //    m->word_flow.add_node_graph(A);
-    //}
+    // ----------------------------------------- Attributes -------------------------------------------
+    {
+        FNode A, null;
+        compare_execute_node(A, is_inside_attribute, create_attribute, null, null);
+        m->word_flow.add_node_graph(A);
+    }
 }

@@ -33,6 +33,12 @@ public:
     std::unique_ptr<Internal> m;
 };
 
+struct Attribute
+{
+    std::string name;
+    std::vector<std::string> arguments;
+};
+
 struct Enum
 {
     std::string name;
@@ -45,6 +51,13 @@ struct Enum
 struct Variable
 {
     std::string name;
+    std::vector<Attribute> attributes;
+};
+
+struct Function
+{
+    std::string name;
+    std::vector<Attribute> attributes;
 };
 
 struct Struct
@@ -54,6 +67,8 @@ struct Struct
     std::string type;
     std::string namespace_scope;
     std::vector<Variable> variables;
+    std::vector<Function> functions;
+    std::vector<Attribute> attributes;
 };
 
 struct ParsedData
