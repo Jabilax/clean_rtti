@@ -1,65 +1,87 @@
-#include "reflection.h"
-#include <iostream>
-#include <string>
-#include <cassert>
-#include <vector>
-
-template<class T>
-auto display_class(const T& object)
-{
-    std::cout << "Class: " << Reflect<T>::name << "\n";
-
-    for (auto var : Reflect<T>::variables)
-    {
-        std::cout << " * Variable: " << var.name << "\n"; // Display name.
-
-        for (const auto attribute : var.attributes())
-        {
-            std::cout << "   - Attibute: " << attribute.name << "\n";
-        }
-
-        var.get(object, [](const auto& var)
-        {
-            std::cout << "   - Value: " << var << "\n";
-        });
-    }
-}
-
-struct [[component]] Person
-{
-    [[do_not_serialize]]
-    std::string name; // Without surname.
-    int age;
-};
-
-//struct Manager
+//#include "reflection.h"
+//#include <iostream>
+//#include <string>
+//#include <cassert>
+//#include <vector>
+//
+//template<class T>
+//auto display_class(const T& object)
 //{
-//private:
-//    [[do_not_serialize]]
-//    std::string window_name{"my_window"};
+//    std::cout << "Class: " << Reflect<T>::name << "\n";
 //
-//    [[readonly]]
-//    std::string title;
+//    for (auto var : Reflect<T>::variables)
+//    {
+//        std::cout << " * Variable: " << var.name << "\n"; // Display name.
 //
-//    int foo();
+//        for (const auto attribute : var.attributes())
+//        {
+//            std::cout << "   - Attibute: " << attribute.name << "\n";
+//        }
 //
-//    bool is_active;
-//    float padding;
-//    long long uid;
-//
-//    [[event_update]]
-//    auto another_function() -> int;
-//
-//
-//    friend class MemberVariable<Manager>;
-//};
+//        var.get(object, [](const auto& var)
+//        {
+//            std::cout << "   - Value: " << var << "\n";
+//        });
+//    }
+//}
+
+#include "base_reflection.h"
+#include <iostream>
+
+struct Person
+{
+    std::string name{"this is my name"};
+    int age;
+
+    void foo() { std::cout << "Toby"; };
+    void bar(){};
+};
 
 int main()
 {
     Person person{};
-    person.name = "Sherlock";
+    //person.name = "Sherlock";
     person.age = 38;
 
-    display_class(person);
+    //auto var = Reflect<Person>::get_variable("name");
+    //std::cout << var.get<std::string>(person) << std::endl;
+    //std::cout << Reflect<Person>::get_variable<int>("age", person) << std::endl;
+
+    for (auto& var : Reflect<Person>::variables)
+    {
+        var.apply(person, [&var](auto& v)
+        {
+            std::cout << var.name << ": " << v << std::endl;
+        });
+
+        if (var.name == "age")
+        {
+            std::cout << "my actual age is: " << var.get<int>(person) + 2 << std::endl;
+        }
+    }
+
+    //Reflect<Person>::call("bar", person);
+    //std::cout << "my dog name is: " << Reflect<Person>::call<std::string>("foo", person) << std::endl;
+    Reflect<Person>::call<std::string>("foo", person);
+
+    for (auto& function : Reflect<Person>::functions)
+    {
+        std::cout << "function: " << function.name << std::endl;
+
+        //var.apply(person, [&var](auto& v)
+        //{
+        //    std::cout << var.name << ": " << v << std::endl;
+        //});
+        //
+        //if (var.name == "age")
+        //{
+        //    std::cout << "my actual age is: " << var.get<int>(person) + 2 << std::endl;
+        //}
+    }
+
+    //std::cout << "my pet name is: " Reflect<Person>::get
+
+
+    //display_class(person);
     //display_class(Manager{});
 }
