@@ -75,7 +75,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)source/</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalDependencies>Shlwapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -116,20 +116,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="source\parser.cpp" />
-    <ClCompile Include="source\main.cpp" />
-    <ClCompile Include="source\reflection.cpp" />
+    <ClCompile Include="parser\generator.cpp" />
+    <ClCompile Include="parser\main.cpp" />
+    <ClCompile Include="parser\parser.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="source\base_reflection.h" />
-    <ClInclude Include="source\generic\node_graph.h" />
-    <ClInclude Include="source\generic\flow_graph.h" />
-    <ClInclude Include="source\parser.h" />
-    <ClInclude Include="source\reflection.h" />
+    <ClInclude Include="parser\generator.h" />
+    <ClInclude Include="parser\graph\node_graph.h" />
+    <ClInclude Include="parser\graph\flow_graph.h" />
+    <ClInclude Include="parser\parser.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="source\generic\node_graph.inl" />
-    <None Include="source\generic\flow_graph.inl" />
+    <None Include="parser\graph\node_graph.inl" />
+    <None Include="parser\graph\flow_graph.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

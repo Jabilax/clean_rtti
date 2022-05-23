@@ -9,23 +9,23 @@ template<class T> using NodePtr = Node<T>*;
 template<class T> using VoidNodeFn = std::function<void(T& data)>;
 template<class T> using BoolNodeFn = std::function<bool(T& data)>;
 
-// Flow is a node graph.
+// Node graph.
 template<class T>
 struct NodeGraph
 {
     NodeGraph(FutureNode<T> start);
 
     // Returns if the flow is exectuting.
-    void start(T& data);
-    void next(T& data);
-    auto is_finished() -> bool;
+    void start       (T& data);
+    void next        (T& data);
+    auto is_finished () -> bool;
 
 private:
     FutureNodeRef<T> start_node;
     NodePtr<T> next_node;
 };
 
-// Base class of a node, to use in a flow.
+// Base class of a node, to use in a node graph.
 template<class T>
 struct Node
 {
@@ -47,9 +47,9 @@ private:
 template<class T>
 struct FutureNodeRef
 {
-    FutureNodeRef(FutureNode<T> node);
-    auto operator->() -> NodePtr<T>;
-    auto get() -> NodePtr<T>;
+    FutureNodeRef   (FutureNode<T> node);
+    auto operator-> () -> NodePtr<T>;
+    auto get        () -> NodePtr<T>;
 
     NodePtr<T>* ptr;
 };
@@ -124,4 +124,4 @@ struct SwitchWaitNode : public Node<T>
 };
 
 
-#include "generic/node_graph.inl"
+#include "parser/graph/node_graph.inl"

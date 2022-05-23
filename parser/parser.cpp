@@ -1,7 +1,7 @@
-#include "parser.h"
-#include "reflection.h"
-#include "generic/node_graph.h"
-#include "generic/flow_graph.h"
+#include "parser/parser.h"
+#include "parser/graph/node_graph.h"
+#include "parser/graph/flow_graph.h"
+#include "parser/generator.h"
 #include <cassert>
 #include <cctype>
 #include <fstream>
@@ -80,6 +80,7 @@ WordData::WordData(ParsingData& data, const std::string& word)
 struct Parser::Internal
 {
     FlowGraph<WordData> word_flow;
+    std::vector<fs::path> files;
 };
 
 Parser::Parser()
@@ -90,12 +91,12 @@ Parser::Parser()
 
 Parser::~Parser()
 {
+    generate_file_reflection_header(m->files);
 }
 
 void Parser::parse_file(const fs::path& path)
 {
     // Todo: potentially add multithreading to this.
-
     const auto text = read_file(path);
     assert(text.has_value()); // Todo: handle this.
 
@@ -108,7 +109,8 @@ void Parser::parse_file(const fs::path& path)
         tokenize(word_flow, parsing_data, text.value()[i]);
     }
 
-    generate_reflection_info(path, parsing_data.parsed);
+    generate_file_reflection_info(path, parsing_data.parsed);
+    m->files.push_back(path);
 }
 
 void Parser::read_token(ParsingData& parsing_data, const std::string& text, int index)

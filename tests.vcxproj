@@ -19,10 +19,15 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="tests\reflection.h" />
+    <ClCompile Include="tests\structs.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="tests\structs.cpp" />
+    <ClInclude Include="include\generated\reflection_generated.h" />
+    <ClInclude Include="include\reflection.h" />
+    <ClInclude Include="include\reflection_forward.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="include\reflection.inl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -127,6 +132,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
+      <AdditionalIncludeDirectories>$(ProjectDir)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -134,6 +140,8 @@
     </Link>
     <PreBuildEvent>
       <Command>"$(ProjectDir)build\parser.exe"</Command>
+      <Message>
+      </Message>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

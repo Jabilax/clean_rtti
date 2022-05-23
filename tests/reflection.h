@@ -10,97 +10,88 @@
 #include <array>
 #include <vector>
 
-template<class T2, class T = T2> class Reflect {};
-struct Attribute;
-using Args = std::vector<const char*>;
-using Attributes = std::vector<Attribute>;
-
-struct Attribute
-{
-    const char* name;
-    std::vector<const char*> arguments;
-};
-
-template<class T> struct EnumValue 
-{
-    const char* name;
-    T value; 
-};
-
-template<class T>
-class MemberVariable
-{
-public:
-    constexpr MemberVariable(int index, const char* name, Attributes&& attribute)
-        : name{ name }
-        , index{ index }
-        , attributes{ attributes }
-    {
-    }
-
-    template<class Fn>
-    auto get(const T& object, Fn callback)
-    { 
-        return Reflect<T>::get(object, index, callback);
-    }
-
-public:
-    const char* name;
-    Attributes attributes;
-
-private:
-    int index;
-};
-
-template<class T>
-class MemberFunction
-{
-public:
-    constexpr MemberFunction(int index, const char* name, Attributes&& attribute)
-        : name{ name }
-        , index{ index }
-        , attributes{ attributes }
-    {
-    }
-
-    template<class Fn>
-    auto call(const T& object, Fn callback)
-    {
-        return Reflect<T>::get(object, index, callback);
-    }
-
-public:
-    const char* name;
-    Attributes attributes;
-
-private:
-    int index;
-};
+template<class T2, class T = T2> struct Reflect {};
+template<class T2, class T = T2> struct MemberVariable {};
+template<class T> struct EnumValue { const char* name; T value; };
+struct Attribute { const char* name; std::vector<const char*> arguments; };
 
 struct Person;
 
 template<class T>
-class Reflect<Person, T>
+struct MemberVariable<Person, T>
 {
-public:
-    static constexpr const char* name{ "Person" };
-    static constexpr std::array<MemberVariable<T>, 2> variables
-    {
-        MemberVariable<T>{0, "name", Attributes{ Attribute{"do_not_serialize", Args{}} }},
-        MemberVariable<T>{1, "age",  Attributes{}},
-    };
+    constexpr MemberVariable(const char* name, int index) : name{ name }, index{ index } {}
 
-private:
     template<class Fn>
-    static void get(const T& object, int var_index, Fn callback) const
+    void get(const T& object, Fn callback) const
     {
-        switch (var_index)
+        switch (index)
         {
-        case 0: callback(object.name); return;
-        case 1: callback(object.age); return;
+        case 0: callback(object.name); break;
+        case 1: callback(object.age); break;
         }
     }
 
-    friend class MemberVariable<Person>;
+    auto attributes() -> std::vector<Attribute> const
+    {
+        switch (index)
+        {
+        }
+        return std::vector<Attribute>{};
+    }
+
+    const char* name;
+
+private:
+    int index;
+};
+
+template<class T>
+struct Reflect<Person, T>
+{
+    static constexpr const char* name{ "Person" };
+    static constexpr std::array<MemberVariable<T>, 2> variables
+    {
+        MemberVariable<T>{"name", 0},
+        MemberVariable<T>{"age", 1},
+    };
+};
+
+struct Human;
+
+template<class T>
+struct MemberVariable<Human, T>
+{
+    constexpr MemberVariable(const char* name, int index) : name{ name }, index{ index } {}
+
+    template<class Fn>
+    void get(const T& object, Fn callback) const
+    {
+        switch (index)
+        {
+        }
+    }
+
+    auto attributes() -> std::vector<Attribute> const
+    {
+        switch (index)
+        {
+        }
+        return std::vector<Attribute>{};
+    }
+
+    const char* name;
+
+private:
+    int index;
+};
+
+template<class T>
+struct Reflect<Human, T>
+{
+    static constexpr const char* name{ "Human" };
+    static constexpr std::array<MemberVariable<T>, 0> variables
+    {
+    };
 };
 

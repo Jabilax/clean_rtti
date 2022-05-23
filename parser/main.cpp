@@ -1,13 +1,4 @@
-#include <string>
-#include <fstream>
-#include <iostream>
-#include <cassert>
-#include <set>
-#include <map>
-#include <vector>
-#include <sstream>
-#include <windows.h>
-#include "parser.h"
+#include "parser/parser.h"
 
 int main()
 {

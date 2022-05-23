@@ -11,24 +11,27 @@ namespace fs = std::filesystem;
 // Forward declarations.
 struct WordData;
 struct ParsingData;
+struct ParsedData;
+template<class T> struct FlowGraph;
 
-template<class T>
-struct FlowGraph;
-
-struct Parser
+class Parser
 {
+public:
+    // Construction & Destruction
     Parser();
     ~Parser();
+
+    // Parse
     void parse_file(const fs::path& path);
 
 private:
     // Helpers
-    auto read_file(const fs::path& path) -> std::optional<std::string>;
     void create_flows();
+    auto read_file(const fs::path& path) -> std::optional<std::string>;
     void read_token(ParsingData& parsing_data, const std::string& text, int index);
     void tokenize(FlowGraph<WordData>& parser, ParsingData& parsing_data, char token);
 
-public:
+private:
     struct Internal;
     std::unique_ptr<Internal> m;
 };

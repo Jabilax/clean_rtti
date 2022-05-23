@@ -1,5 +1,5 @@
 #pragma once
-#include "generic/node_graph.h"
+#include "parser/graph/node_graph.h"
 #include <vector>
 
 // A FlowGraph is a collection of node graphs that act on the same data.
@@ -16,4 +16,4 @@ private:
     std::vector<NodeGraph<T>> active_flows;
 };
 
-#include "generic/flow_graph.inl"
+#include "parser/graph/flow_graph.inl"
