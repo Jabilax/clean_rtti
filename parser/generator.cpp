@@ -72,6 +72,7 @@ void generate_name(std::ofstream& file, const Struct& _struct);
 void generate_variable_num(std::ofstream& file, const Struct& _struct);
 void generate_variable_name(std::ofstream& file, const Struct& _struct);
 void generate_variable(std::ofstream& file, const Struct& _struct);
+void generate_variable_apply(std::ofstream& file, const Struct& _struct);
 void generate_function_num(std::ofstream& file, const Struct& _struct);
 void generate_function_name(std::ofstream& file, const Struct& _struct);
 
@@ -106,6 +107,7 @@ void generate_struct_reflection_info(std::ofstream& file, const ParsedData& data
         generate_variable_num(file, _struct);
         generate_variable_name(file, _struct);
         generate_variable(file, _struct);
+        generate_variable_apply(file, _struct);
         generate_function_num(file, _struct);
         generate_function_name(file, _struct);
 
@@ -167,6 +169,20 @@ void generate_variable(std::ofstream& file, const Struct& _struct)
     file << "            [] (T& i) { return std::any(&i." << var.name << "); },\n";
     file << "        };\n";
     file << "        return *std::any_cast<Var*>(variables[index](instance));\n";
+    file << "    }\n\n";
+}
+
+void generate_variable_apply(std::ofstream& file, const Struct& _struct)
+{
+    file << "    template<class Fn>\n";
+    file << "    static void variable_apply(T & instance, int index, Fn function)\n";
+    file << "    {\n";
+    file << "        static std::function<void(T&, Fn)> apply_variables[]\n";
+    file << "        {\n";
+    for (const auto& var : _struct.variables)
+    file << "            [](T& i, Fn fn) { return fn(i." << var.name << "); },\n";
+    file << "        };\n";
+    file << "        return apply_variables[index](instance, function);\n";
     file << "    }\n\n";
 }
 

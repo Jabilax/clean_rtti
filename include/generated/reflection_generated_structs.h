@@ -44,6 +44,17 @@ struct Reflect<Person, T>
         return *std::any_cast<Var*>(variables[index](instance));
     }
 
+    template<class Fn>
+    static void variable_apply(T & instance, int index, Fn function)
+    {
+        static std::function<void(T&, Fn)> apply_variables[]
+        {
+            [](T& i, Fn fn) { return fn(i.name); },
+            [](T& i, Fn fn) { return fn(i.age); },
+        };
+        return apply_variables[index](instance, function);
+    }
+
     static auto function_num() -> int
     {
         return 1;
@@ -97,6 +108,17 @@ struct Reflect<Human, T>
         return *std::any_cast<Var*>(variables[index](instance));
     }
 
+    template<class Fn>
+    static void variable_apply(T & instance, int index, Fn function)
+    {
+        static std::function<void(T&, Fn)> apply_variables[]
+        {
+            [](T& i, Fn fn) { return fn(i.some_variable); },
+            [](T& i, Fn fn) { return fn(i.slider); },
+        };
+        return apply_variables[index](instance, function);
+    }
+
     static auto function_num() -> int
     {
         return 0;
@@ -143,6 +165,15 @@ struct Reflect<Alien, T>
         {
         };
         return *std::any_cast<Var*>(variables[index](instance));
+    }
+
+    template<class Fn>
+    static void variable_apply(T & instance, int index, Fn function)
+    {
+        static std::function<void(T&, Fn)> apply_variables[]
+        {
+        };
+        return apply_variables[index](instance, function);
     }
 
     static auto function_num() -> int

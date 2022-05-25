@@ -29,15 +29,17 @@ int main()
     //auto name = reflect(person).name();
     auto name2 = reflect<Human>().name();
 
-    for (auto var : reflect<Human>().variables())
+    for (auto& var : reflect<Human>().variables())
     {
         std::cout << var.name() << std::endl;
     }
 
-    for (auto var : reflect(person).variables())
+    for (auto& var : reflect<Person>().variables())
     {
-        if(var.name() == "age")
-            std::cout << "Age: " << var.value<int>() << std::endl;
+        var.apply(person, [](auto& var)
+        {
+            std::cout << var << std::endl;
+        });
     }
 
     //std::cout << reflect<Person>().variable("name") << std::endl;
