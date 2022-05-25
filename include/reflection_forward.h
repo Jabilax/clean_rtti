@@ -1,5 +1,7 @@
 #pragma once
+#include <any>
 #include <map>
+#include <functional>
 #include <string>
 #include <vector>
 #include <type_traits>
@@ -15,8 +17,5 @@ struct Attribute;
 
 using AttributeMap = std::map<std::string, Attribute>;
 
-template<class T, class T2, class Ret>
-using Specialize = typename std::enable_if_t<std::is_same_v<T, T2>, Ret>;
-
-template<class T, class T2, int i, int i2, class Ret>
-using SpecializeIndex = typename std::enable_if_t<std::is_same_v<T, T2> && i == i2, Ret>;
+// Internal Use
+template<class T, class T2 = T> class Reflect;

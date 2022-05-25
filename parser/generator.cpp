@@ -68,8 +68,12 @@ void generate_struct_reflection_info(std::ofstream& file, const ParsedData& data
 
 // struct generators
 void generate_forward_declare(std::ofstream& file, const Struct& _struct);
-void generate_reflect_name(std::ofstream& file, const Struct& _struct);
-void generate_variables(std::ofstream& file, const Struct& _struct);
+void generate_name(std::ofstream& file, const Struct& _struct);
+void generate_variable_num(std::ofstream& file, const Struct& _struct);
+void generate_variable_name(std::ofstream& file, const Struct& _struct);
+void generate_variable(std::ofstream& file, const Struct& _struct);
+void generate_function_num(std::ofstream& file, const Struct& _struct);
+void generate_function_name(std::ofstream& file, const Struct& _struct);
 
 // Helpers
 auto type_name(const Struct& _struct) -> std::string;
@@ -93,9 +97,19 @@ void generate_struct_reflection_info(std::ofstream& file, const ParsedData& data
     for (auto& _struct : data.structs)
     {
         generate_forward_declare(file, _struct);
-        generate_reflect_name(file, _struct);
-        generate_variables(file, _struct);
-        file << "\n";
+
+        file << "template<class T>\n";
+        file << "struct Reflect<" << type_name(_struct) << ", T>\n";
+        file << "{\n";
+
+        generate_name(file, _struct);
+        generate_variable_num(file, _struct);
+        generate_variable_name(file, _struct);
+        generate_variable(file, _struct);
+        generate_function_num(file, _struct);
+        generate_function_name(file, _struct);
+
+        file << "};\n\n\n";
     }
 }
 
@@ -109,42 +123,72 @@ void generate_forward_declare(std::ofstream& file, const Struct& _struct)
     {
         file << _struct.type << " " << _struct.name << ";" << "\n";
     }
+
+    file << "\n";
 }
 
-void generate_reflect_name(std::ofstream& file, const Struct& _struct)
+void generate_name(std::ofstream& file, const Struct& _struct)
 {
-    file << "template<class T> ";
-    file << "auto reflect_name() -> Specialize<" << type_name(_struct) << ", T, std::string> ";
-    file << "{ return \"" << _struct.name << "\";" << " }\n";
+    file << "    static auto name() -> std::string\n";
+    file << "    {\n";
+    file << "        return \"" << _struct.name << "\";\n";
+    file << "    }\n\n";
 }
 
-void generate_variables(std::ofstream& file, const Struct& _struct)
+void generate_variable_num(std::ofstream& file, const Struct& _struct)
 {
-    for (auto i = 0; i < _struct.variables.size(); ++i)
-    {
-    const auto& var = _struct.variables[i];
+    file << "    static auto variable_num() -> int\n";
+    file << "    {\n";
+    file << "        return " << _struct.variables.size() << ";\n";
+    file << "    }\n\n";
+}
 
-    file << "template<class T, int index> ";
-    file << "auto reflect_variable_name() -> SpecializeIndex<" << type_name(_struct) << ", T, " << i << ", index, std::string> ";
-    file << "{ return \"" << var.name << "\"; }\n";
-    }
+void generate_variable_name(std::ofstream& file, const Struct& _struct)
+{
+    file << "    static auto variable_name(int index) -> std::string\n";
+    file << "    {\n";
+    file << "        std::string variable_names[]\n";
+    file << "        {\n";
+    for (const auto& var : _struct.variables)
+    file << "            \"" << var.name << "\",\n";
+    file << "        };\n";
+    file << "        return variable_names[index];\n";
+    file << "    }\n\n";
+}
 
+void generate_variable(std::ofstream& file, const Struct& _struct)
+{
+    file << "    template<class Var>\n";
+    file << "    static auto variable(T& instance, int index) -> Var&\n";
+    file << "    {\n";
+    file << "        static std::function<std::any(T&)> variables[]\n";
+    file << "        {\n";
+    for (const auto& var : _struct.variables)
+    file << "            [] (T& i) { return std::any(&i." << var.name << "); },\n";
+    file << "        };\n";
+    file << "        return *std::any_cast<Var*>(variables[index](instance));\n";
+    file << "    }\n\n";
+}
 
-    //auto _array = "std::array<" + std::to_string(_struct.variables.size()) + ">";
-    //
-    //file << "template<class T>" << "\n";
-    //file << "auto reflect_variables() -> Specialize<" << type_name(_struct) << ", T, const " << _array << ">" << "\n";
-    //file << "{" << "\n";
-    //file << "    static std::vector<MemberVariable<T>> variables" << "\n";
-    //file << "    {" << "\n";
-    //
-    //for (const auto& var : _struct.variables)
-    //{
-    //file << "        MemberVariable<T>{}," << "\n";
-    //}
-    //file << "    };" << "\n";
-    //file << "    return variables;" << "\n";
-    //file << "}" << "\n\n";
+void generate_function_num(std::ofstream& file, const Struct& _struct)
+{
+    file << "    static auto function_num() -> int\n";
+    file << "    {\n";
+    file << "        return " << _struct.functions.size() << ";\n";
+    file << "    }\n\n";
+}
+
+void generate_function_name(std::ofstream& file, const Struct& _struct)
+{
+    file << "    static auto function_name(int index) -> std::string\n";
+    file << "    {\n";
+    file << "        std::string function_names[]\n";
+    file << "        {\n";
+    for (const auto& function : _struct.functions)
+        file << "            \"" << function.name << "\",\n";
+    file << "        };\n";
+    file << "        return function_names[index];\n";
+    file << "    }\n\n";
 }
 
 auto type_name(const Struct& _struct) -> std::string

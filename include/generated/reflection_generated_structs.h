@@ -9,15 +9,155 @@
 #include "../reflection_forward.h"
 
 struct Person;
-template<class T> auto reflect_name() -> Specialize<Person, T, std::string> { return "Person"; }
-template<class T, int index> auto reflect_variable_name() -> SpecializeIndex<Person, T, 0, index, std::string> { return "name"; }
-template<class T, int index> auto reflect_variable_name() -> SpecializeIndex<Person, T, 1, index, std::string> { return "age"; }
+
+template<class T>
+struct Reflect<Person, T>
+{
+    static auto name() -> std::string
+    {
+        return "Person";
+    }
+
+    static auto variable_num() -> int
+    {
+        return 2;
+    }
+
+    static auto variable_name(int index) -> std::string
+    {
+        std::string variable_names[]
+        {
+            "name",
+            "age",
+        };
+        return variable_names[index];
+    }
+
+    template<class Var>
+    static auto variable(T& instance, int index) -> Var&
+    {
+        static std::function<std::any(T&)> variables[]
+        {
+            [] (T& i) { return std::any(&i.name); },
+            [] (T& i) { return std::any(&i.age); },
+        };
+        return *std::any_cast<Var*>(variables[index](instance));
+    }
+
+    static auto function_num() -> int
+    {
+        return 1;
+    }
+
+    static auto function_name(int index) -> std::string
+    {
+        std::string function_names[]
+        {
+            "foo",
+        };
+        return function_names[index];
+    }
+
+};
+
 
 struct Human;
-template<class T> auto reflect_name() -> Specialize<Human, T, std::string> { return "Human"; }
-template<class T, int index> auto reflect_variable_name() -> SpecializeIndex<Human, T, 0, index, std::string> { return "some_variable"; }
-template<class T, int index> auto reflect_variable_name() -> SpecializeIndex<Human, T, 1, index, std::string> { return "slider"; }
+
+template<class T>
+struct Reflect<Human, T>
+{
+    static auto name() -> std::string
+    {
+        return "Human";
+    }
+
+    static auto variable_num() -> int
+    {
+        return 2;
+    }
+
+    static auto variable_name(int index) -> std::string
+    {
+        std::string variable_names[]
+        {
+            "some_variable",
+            "slider",
+        };
+        return variable_names[index];
+    }
+
+    template<class Var>
+    static auto variable(T& instance, int index) -> Var&
+    {
+        static std::function<std::any(T&)> variables[]
+        {
+            [] (T& i) { return std::any(&i.some_variable); },
+            [] (T& i) { return std::any(&i.slider); },
+        };
+        return *std::any_cast<Var*>(variables[index](instance));
+    }
+
+    static auto function_num() -> int
+    {
+        return 0;
+    }
+
+    static auto function_name(int index) -> std::string
+    {
+        std::string function_names[]
+        {
+        };
+        return function_names[index];
+    }
+
+};
+
 
 struct Alien;
-template<class T> auto reflect_name() -> Specialize<Alien, T, std::string> { return "Alien"; }
+
+template<class T>
+struct Reflect<Alien, T>
+{
+    static auto name() -> std::string
+    {
+        return "Alien";
+    }
+
+    static auto variable_num() -> int
+    {
+        return 0;
+    }
+
+    static auto variable_name(int index) -> std::string
+    {
+        std::string variable_names[]
+        {
+        };
+        return variable_names[index];
+    }
+
+    template<class Var>
+    static auto variable(T& instance, int index) -> Var&
+    {
+        static std::function<std::any(T&)> variables[]
+        {
+        };
+        return *std::any_cast<Var*>(variables[index](instance));
+    }
+
+    static auto function_num() -> int
+    {
+        return 0;
+    }
+
+    static auto function_name(int index) -> std::string
+    {
+        std::string function_names[]
+        {
+        };
+        return function_names[index];
+    }
+
+};
+
 

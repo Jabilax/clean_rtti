@@ -1,15 +1,16 @@
 #pragma once
+#include "reflection_forward.h"
 #include "generated/reflection_generated.h"
 
 // Reflect Interface
 // ----------------------------------------------------------------------------------------------
 template<class T> auto reflect() -> ReflectType<T>;
-template<class T> auto reflect(T instance) -> ReflectInstance<T>;
+template<class T> auto reflect(T& instance) -> ReflectInstance<T>;
 //template<class T> auto reflect(T& instance) -> ReflectInstance<T>;
 //template<class T> auto reflect(const T& instance) -> const ConstReflectInstance<T>;
 
 
-// ReflectType
+// ReflectMemberVariableType
 // ----------------------------------------------------------------------------------------------
 template<class T>
 class ReflectMemberVariableType
@@ -20,11 +21,40 @@ public:
     auto name() const -> std::string;
     auto attributes() const -> AttributeMap;
 
+    template<class Var>
+    auto value(T& instance) -> Var&;
+
+    template<class Var>
+    auto value(const T& instance) const -> const Var&;
+
 private:
     int index;
 };
 
-// ReflectType
+
+// ReflectMemberVariable
+// ----------------------------------------------------------------------------------------------
+template<class T>
+class ReflectMemberVariable
+{
+public:
+    ReflectMemberVariable(T& instance, int index);
+
+    auto name() const -> std::string;
+    auto attributes() const -> AttributeMap;
+
+    template<class Var>
+    auto value() -> Var&;
+
+    template<class Var>
+    auto value() const -> const Var&;
+
+private:
+    T& instance;
+    int index;
+};
+
+// ReflectMemberFunctionType
 // ----------------------------------------------------------------------------------------------
 template<class T>
 class ReflectMemberFunctionType
@@ -45,15 +75,13 @@ template<class T>
 class ReflectType
 {
 public:
-    using Type = T;
-
     // Info about the type.
     auto name() const -> std::string;
     auto attributes() const -> AttributeMap;
 
     // List of members. (returns a std::array& of the members, not defined since we don't yet know the size)
-    auto variables() const;
-    auto functions() const;
+    auto variables() const -> std::vector<ReflectMemberVariableType<T>>;
+    auto functions() const -> std::vector<ReflectMemberFunctionType<T>>;
 
     // Info of member by name.
     auto variable(const std::string& name) -> const ReflectMemberVariable<T>&;
@@ -68,19 +96,19 @@ class ReflectInstance
 {
 public:
     // Constructor
-    ReflectInstance(T class_instance);
+    ReflectInstance(T& class_instance);
 
     // Info about the type.
     auto name() const -> std::string;
     auto attributes() const -> AttributeMap;
 
     // List of members.
-    auto variables(); // -> std::array<MemberVariable, ?>&
-    auto variables() const; // -> const std::array<MemberVariable, ?>&
+    auto variables() -> std::vector<ReflectMemberVariable<T>>;
+    auto variables() const; // TODO
     auto functions(); // -> std::array<MemberFunction, ?>&
     auto functions() const; // -> const std::array<MemberFunction, ?>&
 
-    // Info of memeber by name.
+    // Info of member by name.
     auto variable(const std::string& name) -> ReflectMemberVariable<T>&;
     auto variable(const std::string& name) const -> const ReflectMemberVariable<T>&;
     auto function(const std::string& name) -> ReflectMemberFunction<T>&;
@@ -95,7 +123,7 @@ public:
     template<class Fn> void apply_function(const std::string& name, Fn func);
 
 private:
-    T instance;
+    T& instance;
 };
 
 #include "reflection.inl"

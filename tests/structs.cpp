@@ -23,10 +23,22 @@ struct Alien
 int main()
 {
     Person person;
+    person.age = 5;
 
-    auto person_reflect = reflect(person);
-    auto name = reflect(person).name();
+    //auto person_reflect = reflect(person);
+    //auto name = reflect(person).name();
     auto name2 = reflect<Human>().name();
+
+    for (auto var : reflect<Human>().variables())
+    {
+        std::cout << var.name() << std::endl;
+    }
+
+    for (auto var : reflect(person).variables())
+    {
+        if(var.name() == "age")
+            std::cout << "Age: " << var.value<int>() << std::endl;
+    }
 
     //std::cout << reflect<Person>().variable("name") << std::endl;
 
