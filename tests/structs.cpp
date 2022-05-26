@@ -27,20 +27,22 @@ int main()
 
     //auto person_reflect = reflect(person);
     //auto name = reflect(person).name();
-    auto name2 = reflect<Human>().name();
+    //auto name2 = reflect<Human>().name();
+    //
+    //for (auto& var : reflect<Human>().variables())
+    //{
+    //    std::cout << var.name() << std::endl;
+    //}
+    //
+    //for (auto& var : reflect<Person>().variables())
+    //{
+    //    var.apply(person, [](auto& var)
+    //    {
+    //        std::cout << var << std::endl;
+    //    });
+    //}
 
-    for (auto& var : reflect<Human>().variables())
-    {
-        std::cout << var.name() << std::endl;
-    }
-
-    for (auto& var : reflect<Person>().variables())
-    {
-        var.apply(person, [](auto& var)
-        {
-            std::cout << var << std::endl;
-        });
-    }
+    std::cout << reflect(person).variable_by_name("name").value<std::string>() << std::endl;
 
     //std::cout << reflect<Person>().variable("name") << std::endl;
 
