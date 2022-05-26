@@ -69,6 +69,28 @@ struct Reflect<Person, T>
         return function_names[index];
     }
 
+    template<class Ret, typename... Args>
+    static auto function_call(T& instance, int index, Args&&... args) -> Ret
+    {
+        auto call_function = [](auto function, auto& i, auto&&... args)
+        {
+            if constexpr (std::is_void_v<std::invoke_result_t<decltype(function)>>)
+            {
+                return std::any(std::invoke(function, i, std::forward<decltype(args)>(args)...));
+            }
+            else
+            {
+                return std::any(); std::invoke(function, i, std::forward<decltype(args)>(args)...);
+            }
+        };
+    
+        static std::function<std::any(T&, Args&&... args)> call_functions[]
+        {
+            [call_function](T& i, Args&&... args){ return call_function(&T::foo, i, std::forward<Args>(args)...); },
+        };
+        return std::any_cast<Ret>(call_functions[index](instance, std::forward<Args>(args)...));
+    }
+
 };
 
 
@@ -132,6 +154,27 @@ struct Reflect<Human, T>
         return function_names[index];
     }
 
+    template<class Ret, typename... Args>
+    static auto function_call(T& instance, int index, Args&&... args) -> Ret
+    {
+        auto call_function = [](auto function, auto& i, auto&&... args)
+        {
+            if constexpr (std::is_void_v<std::invoke_result_t<decltype(function)>>)
+            {
+                return std::any(std::invoke(function, i, std::forward<decltype(args)>(args)...));
+            }
+            else
+            {
+                return std::any(); std::invoke(function, i, std::forward<decltype(args)>(args)...);
+            }
+        };
+    
+        static std::function<std::any(T&, Args&&... args)> call_functions[]
+        {
+        };
+        return std::any_cast<Ret>(call_functions[index](instance, std::forward<Args>(args)...));
+    }
+
 };
 
 
@@ -187,6 +230,27 @@ struct Reflect<Alien, T>
         {
         };
         return function_names[index];
+    }
+
+    template<class Ret, typename... Args>
+    static auto function_call(T& instance, int index, Args&&... args) -> Ret
+    {
+        auto call_function = [](auto function, auto& i, auto&&... args)
+        {
+            if constexpr (std::is_void_v<std::invoke_result_t<decltype(function)>>)
+            {
+                return std::any(std::invoke(function, i, std::forward<decltype(args)>(args)...));
+            }
+            else
+            {
+                return std::any(); std::invoke(function, i, std::forward<decltype(args)>(args)...);
+            }
+        };
+    
+        static std::function<std::any(T&, Args&&... args)> call_functions[]
+        {
+        };
+        return std::any_cast<Ret>(call_functions[index](instance, std::forward<Args>(args)...));
     }
 
 };

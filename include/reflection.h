@@ -68,7 +68,9 @@ public:
     // Info about the type
     auto name() const -> std::string;
     //  auto attributes() const -> AttributeMap; TODO
-    //  auto call(); TODO
+
+    template<class Ret = void, typename... Args>
+    auto call(T& instance, Args&&... args) -> Ret;
 
 private:
     int index;
@@ -147,7 +149,8 @@ public:
     auto name() const -> std::string;
     auto attributes() const -> AttributeMap;
 
-    // auto call(); TODO
+    template<class Ret = void, typename... Args>
+    auto call(Args&&... args) -> Ret;
 
 private:
     T& instance;

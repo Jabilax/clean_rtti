@@ -6,8 +6,9 @@ struct Person
     std::string name{"this is my name"};
     int age;
 
-    void foo() { std::cout << "Toby"; };
-    void bar() {};
+    void foo() { std::cout << "Toby"; }
+    auto get_name() -> std::string { return "MyName"; }
+    void bar() {}
 };
 
 struct Human
@@ -42,8 +43,10 @@ int main()
     //    });
     //}
 
-    std::cout << reflect(person).variable_by_name("name").value<std::string>() << std::endl;
+    auto string = reflect(person).function_by_name("get_name").call<std::string>();
+    std::cout << string << std::endl;
 
+    std::cout << "WAIT" << std::endl;
     //std::cout << reflect<Person>().variable("name") << std::endl;
 
 

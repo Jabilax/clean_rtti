@@ -182,11 +182,11 @@ auto ReflectMemberFunction<T>::name() const -> std::string
 // }
 
 
-// template<class T>
-// auto ReflectMemberFunction<T>::call()
-// {
-//     TODO
-// }
+template<class T> template<class Ret, typename... Args>
+auto ReflectMemberFunction<T>::call(T& instance, Args&&... args) -> Ret
+{
+    return Reflect<T>::template function_call<Ret, Args...>(instance, index, std::forward<Args>(args)...);
+}
 
 
 // ------------------------------------------------------------------------------------------------
@@ -349,9 +349,8 @@ auto ReflectMemberFunctionInstance<T>::attributes() const -> AttributeMap
     return ReflectMemberFunction<T>(index).attributes();
 }
 
-// template<class T>
-// auto ReflectMemberFunctionInstance<T>::call()
-// {
-//     TODO
-// }
-// auto call(); TODO
+template<class T> template<class Ret, typename... Args>
+auto ReflectMemberFunctionInstance<T>::call(Args&&... args) -> Ret
+{
+    return ReflectMemberFunction<T>(index).call<Ret>(instance, std::forward<Args>(args)...);
+}
