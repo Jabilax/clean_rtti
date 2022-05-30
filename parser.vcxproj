@@ -122,13 +122,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="parser\generator.h" />
-    <ClInclude Include="parser\graph\node_graph.h" />
-    <ClInclude Include="parser\graph\flow_graph.h" />
+    <ClInclude Include="parser\parsed_data.h" />
     <ClInclude Include="parser\parser.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="parser\graph\node_graph.inl" />
-    <None Include="parser\graph\flow_graph.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

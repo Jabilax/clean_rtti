@@ -3,7 +3,7 @@
 int main()
 {
     Parser parser;
-    parser.parse_file("F:\\others\\clean_rtti\\tests\\structs.cpp");
+    parser.parse_file("c:\\repositories\\clean_rtti\\tests\\structs.cpp");
     //parser.parse_file("C:\\Repositories\\clean_rtti\\source\\generic_parser\\flow.h");
 
     return 0;

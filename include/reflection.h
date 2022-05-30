@@ -2,6 +2,9 @@
 #include "reflection_forward.h"
 #include "generated/reflection_generated.h"
 
+// Attibute macro
+#define attribute(...)
+
 // Reflect Interface
 // ----------------------------------------------------------------------------------------------
 template<class T> auto reflect() -> ReflectClass<T>;
@@ -17,7 +20,7 @@ class ReflectClass
 public:
     // Info about the type
     static auto name() -> std::string;
-    static auto attributes() -> AttributeMap;
+    static auto attributes() -> const AttributeMap&;
 
     // List of members (returns a std::array& of the members, not defined since we don't yet know the size)
     static auto variables() -> const std::vector<ReflectMemberVariable<T>>&;
@@ -39,7 +42,7 @@ public:
 
     // Info about the type
     auto name() const -> std::string;
-    // auto attributes() const -> AttributeMap; Todo
+    auto attributes() const -> const AttributeMap&;
 
     // Get value
     template<class Var> auto value(T& instance) const -> Var&;
@@ -67,7 +70,7 @@ public:
 
     // Info about the type
     auto name() const -> std::string;
-    //  auto attributes() const -> AttributeMap; TODO
+    auto attributes() const -> const AttributeMap&;
 
     template<class Ret = void, typename... Args>
     auto call(T& instance, Args&&... args) -> Ret;
@@ -92,7 +95,7 @@ public:
 
     // Info about the type
     auto name() const -> std::string;
-    auto attributes() const -> AttributeMap;
+    auto attributes() const -> const AttributeMap&;
 
     // List of members
     auto variables() -> std::vector<ReflectMemberVariableInstance<T>>;
@@ -121,7 +124,7 @@ public:
 
     // Info about the type
     auto name() const -> std::string;
-    auto attributes() const -> AttributeMap;
+    auto attributes() const -> const AttributeMap&;
 
     // Get value
     template<class Var> auto value() -> Var&;
@@ -147,7 +150,7 @@ public:
 
     // Info about the type
     auto name() const -> std::string;
-    auto attributes() const -> AttributeMap;
+    auto attributes() const -> const AttributeMap&;
 
     template<class Ret = void, typename... Args>
     auto call(Args&&... args) -> Ret;

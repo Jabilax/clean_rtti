@@ -36,9 +36,9 @@ auto ReflectClass<T>::name() -> std::string
 }
 
 template<class T> 
-auto ReflectClass<T>::attributes() -> AttributeMap 
+auto ReflectClass<T>::attributes() -> const AttributeMap&
 {
-    return TODO<T>(); // TODO
+    return Reflect<T>::attributes();
 }
 
 template<class T>
@@ -128,11 +128,11 @@ auto ReflectMemberVariable<T>::name() const -> std::string
     return Reflect<T>::variable_name(index);
 }
 
-// template<class T>
-// auto ReflectMemberVariableType<T>::attributes() const -> AttributeMap
-// {
-//     TODO
-// }
+template<class T>
+auto ReflectMemberVariable<T>::attributes() const -> const AttributeMap&
+{
+    return Reflect<T>::variable_attributes(index);
+}
 
 template<class T> template<class Var>
 auto ReflectMemberVariable<T>::value(T& instance) const -> Var&
@@ -175,11 +175,11 @@ auto ReflectMemberFunction<T>::name() const -> std::string
     return Reflect<T>::function_name(index);
 }
 
-// template<class T>
-// auto ReflectMemberFunction<T>::attributes() const -> AttributeMap
-// {
-//     TODO
-// }
+template<class T>
+auto ReflectMemberFunction<T>::attributes() const -> const AttributeMap&
+{
+    return Reflect<T>::function_attributes(index);
+}
 
 
 template<class T> template<class Ret, typename... Args>
@@ -206,7 +206,7 @@ auto ReflectClassInstance<T>::name() const -> std::string
 }
 
 template<class T>
-auto ReflectClassInstance<T>::attributes() const -> AttributeMap
+auto ReflectClassInstance<T>::attributes() const -> const AttributeMap&
 {
     return ReflectClass<T>::attributes();
 }
@@ -297,7 +297,7 @@ auto ReflectMemberVariableInstance<T>::name() const -> std::string
 }
 
 template<class T>
-auto ReflectMemberVariableInstance<T>::attributes() const -> AttributeMap
+auto ReflectMemberVariableInstance<T>::attributes() const -> const AttributeMap&
 {
     return ReflectMemberVariable<T>(index).attributes();
 }
@@ -344,7 +344,7 @@ auto ReflectMemberFunctionInstance<T>::name() const -> std::string
 }
 
 template<class T>
-auto ReflectMemberFunctionInstance<T>::attributes() const -> AttributeMap
+auto ReflectMemberFunctionInstance<T>::attributes() const -> const AttributeMap&
 {
     return ReflectMemberFunction<T>(index).attributes();
 }

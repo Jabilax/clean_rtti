@@ -1,14 +1,25 @@
 #include "include/reflection.h"
 #include <iostream>
 
+enum editor
+{
+    show,
+    serialize
+};
+
+attribute(editor::show("name", 5.f), editor::serialize)
 struct Person
 {
-    std::string name{"this is my name"};
+    attribute(some_attribute, hello)
+    std::string name{ "this is my name" };
     int age;
 
-    void foo() { std::cout << "Toby"; }
+    void foo() { { std::cout << "Toby"; } }
     auto get_name() -> std::string { return "MyName"; }
     void bar() {}
+
+    attribute(editor::serialize(5.f))
+    float my_array[2];
 };
 
 struct Human
@@ -43,10 +54,17 @@ int main()
     //    });
     //}
 
-    auto string = reflect(person).function_by_name("get_name").call<std::string>();
-    std::cout << string << std::endl;
+    for (auto& attribute : reflect(person).variable_by_name("my_array").attributes())
+    {
+        std::cout << std::any_cast<float>(attribute.second[0]) << std::endl;
+    }
 
-    std::cout << "WAIT" << std::endl;
+
+    //reflect(person).function_by_name("foo").call();
+    //auto value = std::any_cast<float>(reflect(person).attributes()["editor::show"][1]);
+    //std::cout << string << std::endl;
+
+    //std::cout << value << std::endl;
     //std::cout << reflect<Person>().variable("name") << std::endl;
 
 
@@ -104,4 +122,6 @@ int main()
 
     //display_class(person);
     //display_class(Manager{});
+
+    //system("pause");
 }
